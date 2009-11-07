@@ -21,7 +21,7 @@ bool pollards::factor(mpz_t n, std::vector<unsigned long int> & factors) {
             return false;
     }
     // Hantera bara 64 bitars tal så faktorerna får plats i en lista med unsigned long ints
-    if (mpz_sizeinbase(n, 2) >= 75) {
+    if (mpz_sizeinbase(n, 2) >= 83) {
         // std::cout << "fail" << std::endl;
         return false;
     }
