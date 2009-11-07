@@ -1,12 +1,11 @@
 #include <gmp.h>
+#include <vector>
 
 class pollards {
-    mpz_t * n;
-
-    void f(mpz_t);
+    static void f(mpz_t, mpz_t);
 
     public: 
-    pollards(mpz_t *);
-    bool run(mpz_t);
-
+    static bool factor(mpz_t);
+    
+    static std::vector<unsigned long int> factors;
 };
