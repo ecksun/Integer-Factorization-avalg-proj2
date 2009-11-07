@@ -1,7 +1,7 @@
 <h2>Pollard's rho algoritm</h2>
 Om talet som går in i algoritmen är ett primtal kommer det returneras som en faktor.
 Funktionen vi använder för att titta om ett tal är ett primtal kan även säga om talet
-<i>sannolikt</i> är ett primtal.
+<em>sannolikt</em> är ett primtal.
 
 Vi kan alltså inte testa större tal för att den sannolikhetsfunktionen blir fel
 
