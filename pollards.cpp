@@ -1,9 +1,8 @@
 #include "pollards.h"
 #include <iostream>
 
-bool pollards::factor(mpz_t n, std::vector<unsigned long int> & factors) {
+bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors) {
     // std::cerr << "factor(" << n << ")" << std::endl;
-    // std::cerr << "size:" << mpz_sizeinbase(n, 2) << std::endl;
 
     /*
      * In case we have found the factor "1", just return
@@ -18,10 +17,9 @@ bool pollards::factor(mpz_t n, std::vector<unsigned long int> & factors) {
         // Jämnt tal
         // std::cerr << "Found even number" << std::endl;
 
-        mpz_t two;
-        mpz_init_set_si(two, 2);
+        mpz_class two(2);
 
-        factors.push_back(2);
+        factors.push_back(two);
 
         mpz_divexact_ui(n, n, 2);
 
@@ -39,12 +37,9 @@ bool pollards::factor(mpz_t n, std::vector<unsigned long int> & factors) {
     // We found a prime! hopefully
     if (prime == 2 || prime == 1) {
         // std::cerr << "We found a prime" << std::endl;
-        if (mpz_fits_ulong_p(n)) {
-            factors.push_back(mpz_get_ui(n));
-            return true;
-        }
-        else 
-            return false;
+        mpz_class tmp (n);
+        factors.push_back(tmp);
+        return true;
     }
     else {
         // std::cerr << " Running pollards" << std::endl;

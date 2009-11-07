@@ -18,4 +18,16 @@ Det visade sig vara vektorn, det ser vi nu när vi ignorerar de faktorer som int
 <li>Få std::vector<mpz_t> att fungera</li>
 </ul>
 
+<h1>GMP</h1>
 
+Det visade sig att jag använt c-versione av gmp, tydligen finns det en c++ version också, då man använder mpz_class 
+istället för mpz_t.
+
+mpz_t går tex inte att stoppa in i en vektor, det går fint med mpz_class. 
+
+Jag vet INTE hur man gör alla operationer som man kan göra på em mpz_t på em mpz_class, det verkar nästan som
+att man måste konvertera den till en mpz_t varje gång, vilket känns otympligt
+
+För tillfället så använder jag mpz_t överallt förutom när jag stoppar in faktorerna i vektorn för utskrift, då 
+gör jag om dem till mpz_class. Jag tror det fungerar tillräckligt bra, då det som max finns 100 faktorer på ett 100
+bitars tal. Så maximalt kommer vi kasta om mpz_t till mpz_class 50*100=5000 gånger, det känns inte som så mycket overhead

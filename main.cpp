@@ -1,4 +1,5 @@
 #include <gmp.h>
+#include <gmpxx.h>
 #include <iostream>
 #include "pollards.h"
 
@@ -7,7 +8,7 @@ int main() {
     mpz_init(a);
 
     // A vector to store our results in
-    std::vector<unsigned long int> factors;
+    std::vector<mpz_class> factors;
 
     char string [32];
     while (scanf("%s", &string) != EOF) {
