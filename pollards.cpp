@@ -1,9 +1,9 @@
 #include "pollards.h"
 #include <iostream>
 
-bool pollards::factor(mpz_t n) {
-    std::cerr << "factor(" << n << ")" << std::endl;
-    std::cerr << "size:" << mpz_sizeinbase(n, 2) << std::endl;
+bool pollards::factor(mpz_t n, std::vector<unsigned long int> & factors) {
+    // std::cerr << "factor(" << n << ")" << std::endl;
+    // std::cerr << "size:" << mpz_sizeinbase(n, 2) << std::endl;
     if (mpz_cmp_si(n, 1) == 0)
         return true;
     if (mpz_even_p(n)) {
@@ -12,23 +12,26 @@ bool pollards::factor(mpz_t n) {
         mpz_t two;
         mpz_init_set_si(two, 2);
         // std::cout << 2 << std::endl;
-        pollards::factors.push_back(2);
+        factors.push_back(2);
 
         mpz_divexact_ui(n, n, 2);
-        pollards::factor(n);
-        return true;
+        if (pollards::factor(n, factors))
+            return true;
+        else 
+            return false;
     }
     // Hantera bara 64 bitars tal så faktorerna får plats i en lista med unsigned long ints
-    if (mpz_sizeinbase(n, 2) >= 64) {
-        std::cout << "fail" << std::endl;
+    if (mpz_sizeinbase(n, 2) >= 75) {
+        // std::cout << "fail" << std::endl;
         return false;
     }
 
     int prime = mpz_probab_prime_p(n, 5);
     // We found a prime!
-    if (prime == 2) {
+    if (prime == 2 || prime == 1) {
         // std::cerr << "We found a prime" << std::endl;
-        std::cout << n << std::endl;
+        // std::cout << n << std::endl;
+        factors.push_back(mpz_get_ui(n));
         return true;
     }
     else {
@@ -54,14 +57,14 @@ bool pollards::factor(mpz_t n) {
         }
         if (mpz_cmp(factor, n) == 0) {
             // We coudlnt find anything usefull
-            std::cout << "fail" << std::endl;
+            // std::cout << "fail" << std::endl;
             return false;
         }
         else {
             mpz_divexact(n, n, factor);
             // std::cerr << "Starting new recursion" << std::endl;
-            if (pollards::factor(n) && 
-            pollards::factor(factor))
+            if (pollards::factor(n, factors) && 
+            pollards::factor(factor, factors))
                 return true;
             else
                 return false;
@@ -71,6 +74,6 @@ bool pollards::factor(mpz_t n) {
 
 void pollards::f(mpz_t x, mpz_t n) {
     mpz_mul(x, x, x);
-    mpz_add_ui(x, x, 4710);
+    mpz_add_ui(x, x, 2);
     mpz_mod(x, x, n);
 }
