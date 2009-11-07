@@ -31,7 +31,7 @@ bool pollards::factor(mpz_t n, std::vector<unsigned long int> & factors) {
             return false;
     }
     // Hantera bara 64 bitars tal så faktorerna får plats i en lista med unsigned long ints
-    if (mpz_sizeinbase(n, 2) >= 82) {
+    if (mpz_sizeinbase(n, 2) >= 84) {
         return false;
     }
 
@@ -39,8 +39,12 @@ bool pollards::factor(mpz_t n, std::vector<unsigned long int> & factors) {
     // We found a prime! hopefully
     if (prime == 2 || prime == 1) {
         // std::cerr << "We found a prime" << std::endl;
-        factors.push_back(mpz_get_ui(n));
-        return true;
+        if (mpz_fits_ulong_p(n)) {
+            factors.push_back(mpz_get_ui(n));
+            return true;
+        }
+        else 
+            return false;
     }
     else {
         // std::cerr << " Running pollards" << std::endl;
