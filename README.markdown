@@ -34,3 +34,4 @@ bitars tal. Så maximalt kommer vi kasta om mpz_t till mpz_class 50*100=5000 gå
 
 <h1>Tal i kattis testfall</h1>
 Ett tal ligger mellan 84 och 86 bitar
+Två tal mellan 86 och 87 bitar
