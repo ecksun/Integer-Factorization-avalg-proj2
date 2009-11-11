@@ -3,7 +3,7 @@
 #include <vector>
 
 class trial_division {
-    const static int divisors = 256;
+    const static int divisors = 4096;
     // unsigned long int divisor[divisors];
 
     public: 
