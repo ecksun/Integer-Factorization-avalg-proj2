@@ -2,6 +2,7 @@
 #include <gmpxx.h>
 #include <iostream>
 #include "pollards.h"
+#include "trial_division.h"
 
 int main() {
     mpz_t a;
@@ -15,6 +16,12 @@ int main() {
         // Read the next integer
         mpz_set_str(a, string, 10);
         std::cerr << "working on: " << a << std::endl;
+        // Try trial division for small numbers here instead of 
+        // in pollards
+        
+        trial_division TD;
+
+        TD.factor(a, factors);
 
         if (pollards::factor(a, factors)) {
             // In case we didnt fail, print the factors
