@@ -29,7 +29,7 @@ bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors) {
             return false;
     }
     // Hantera bara 64 bitars tal så faktorerna får plats i en lista med unsigned long ints
-    if (mpz_sizeinbase(n, 2) >= 84) {
+    if (mpz_sizeinbase(n, 2) >= 87) {
         return false;
     }
 
@@ -45,8 +45,9 @@ bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors) {
         // std::cerr << " Running pollards" << std::endl;
         // Init some temporary variables
         mpz_t x, y, tmp, factor;
-        mpz_init_set_ui(x, 2);
-        mpz_init_set_ui(y, 2);
+        // H ändrade x och y till 3 och fick förbättring
+        mpz_init_set_ui(x, 3);
+        mpz_init_set_ui(y, 3);
         mpz_init(tmp);
         mpz_init_set_ui(factor, 1);
 
@@ -87,6 +88,6 @@ bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors) {
  */
 void pollards::f(mpz_t x, mpz_t n) {
     mpz_mul(x, x, x);
-    mpz_add_ui(x, x, 2);
+    mpz_add_ui(x, x, 1);
     mpz_mod(x, x, n);
 }
