@@ -1,6 +1,7 @@
 <h1>Länkar</h1>
 http://www.interactivecode.com/programming-coding-1/implementing-quadratic-sieve-3805/
 http://xvid.se/~xun/001692.html
+http://www.nada.kth.se/~joel/qs_lecture.pdf
 
 <h2>Pollard's rho algoritm</h2>
 Om talet som går in i algoritmen är ett primtal kommer det returneras som en faktor.
