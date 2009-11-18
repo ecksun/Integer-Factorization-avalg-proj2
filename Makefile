@@ -1,5 +1,5 @@
 FLAGS=-O2 -lgmpxx -lgmp
-all:
+all: clean
 	g++ ${FLAGS} main.cpp pollards.h pollards.cpp trial_division.h trial_division.cpp
 
 run: all
@@ -8,3 +8,5 @@ run: all
 submit: all
 	./submit.py -f -p factoring main.cpp pollards.h pollards.cpp trial_division.h trial_division.cpp
 
+clean:
+	rm *.gch
