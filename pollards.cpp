@@ -1,5 +1,7 @@
 #include "pollards.h"
 #include <iostream>
+#define max_bit_size 87
+#define iterations_before_gcd 100
 
 bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors) {
     pollards::factor(n, factors, 3);
@@ -14,7 +16,7 @@ bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors, int initValue) 
     if (mpz_cmp_si(n, 1) == 0)
         return true;
     // Hantera bara "små" tal så faktorerna får plats i en lista med unsigned long ints
-    if (mpz_sizeinbase(n, 2) >= 87) {
+    if (mpz_sizeinbase(n, 2) >= max_bit_size) {
         return false;
     }
 
@@ -40,7 +42,7 @@ bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors, int initValue) 
         // The actual pollards algoritm
         while (mpz_cmp_si(factor, 1) == 0) {
             mpz_set_ui(factor, 1);
-            for (int i = 0; i < 15; i++) {
+            for (int i = 0; i < iterations_before_gcd; i++) {
                 pollards::f(x, n);
                 pollards::f(y, n);
                 pollards::f(y, n);
