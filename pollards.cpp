@@ -20,7 +20,7 @@ bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors, int initValue) 
 
     int prime = mpz_probab_prime_p(n, 5);
     // We found a prime! hopefully
-    if (prime == 2 || prime == 1) {
+    if (prime != 0) {
         // std::cerr << "We found a prime" << std::endl;
         mpz_class tmp (n);
         factors.push_back(tmp);
@@ -42,7 +42,7 @@ bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors, int initValue) 
             pollards::f(x, n);
             pollards::f(y, n);
             pollards::f(y, n);
-            mpz_sub(tmp, x, y);
+            mpz_sub(tmp, y, x);
             mpz_abs(tmp, tmp);
             mpz_gcd(factor, tmp, n);
             // std::cerr << "x:" << x << std::endl;
