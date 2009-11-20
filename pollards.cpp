@@ -2,6 +2,10 @@
 #include <iostream>
 
 bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors) {
+    pollards::factor(n, factors, 3);
+}
+
+bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors, int initValue) {
     // std::cerr << "factor(" << n << ")" << std::endl;
 
     /*
@@ -27,8 +31,8 @@ bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors) {
         // Init some temporary variables
         mpz_t x, y, tmp, factor;
         // H ändrade x och y till 3 och fick förbättring
-        mpz_init_set_ui(x, 3);
-        mpz_init_set_ui(y, 3);
+        mpz_init_set_ui(x, initValue);
+        mpz_init_set_ui(y, initValue);
         mpz_init(tmp);
         mpz_init_set_ui(factor, 1);
 
@@ -48,8 +52,14 @@ bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors) {
         }
         if (mpz_cmp(factor, n) == 0) {
             // We coudlnt find anything usefull
-            // std::cout << "fail" << std::endl;
-            return false;
+
+
+            // Trying another init value. Without the "return false"
+            // in this if statement we dont have the ability to fail.
+            // This might cause TLE if we increase the input values
+            // It runs OK with < 87 bits.
+            return pollards::factor(n, factors, initValue+1);
+            // return false;
         }
         else {
             // We found a factor! lets se if it contains any more factors
