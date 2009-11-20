@@ -7,6 +7,11 @@ trial_division::trial_division() {
 
 void trial_division::factor(mpz_t n, std::vector<mpz_class> & factors) {
     // std::cerr << "factor(" << n << ")" << std::endl;
+    // mpz_sqrt() eller mpz_tdiv_q_2exp
+    mpz_t sqrt;
+    mpz_init(sqrt);
+    mpz_sqrt(sqrt, n);
+
 
     mpz_t prime;
     mpz_init_set_ui(prime, 2);
@@ -26,10 +31,16 @@ void trial_division::factor(mpz_t n, std::vector<mpz_class> & factors) {
 
         mpz_divexact_ui(n, n, 2);
         this->factor(n, factors); 
+        return;
     }
     else {
         for (int i = 0; i < divisors; i++) {
             mpz_nextprime(prime, prime);
+            // For small numbers we dont want to try more then nescesary
+            if (mpz_cmp(prime, sqrt) > 0) {
+                return;
+            }
+
             if (mpz_divisible_p(n, prime) != 0) {
                 mpz_class factor(prime);
 
