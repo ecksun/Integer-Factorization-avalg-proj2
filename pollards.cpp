@@ -63,8 +63,8 @@ bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors, int initValue) 
             // Trying another init value. Without the "return false"
             // in this if statement we dont have the ability to fail.
             // This might cause TLE if we increase the input values
-            // It runs OK with < 87 bits.
-            return pollards::factor(n, factors, initValue+1);
+            // It runs OK with < 88 bits.
+            return pollards::factor(n, factors, initValue-1);
             // return false;
         }
         else {
