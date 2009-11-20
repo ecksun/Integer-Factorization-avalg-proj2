@@ -68,7 +68,7 @@ bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors) {
  * a pseudo-random function modulo n
  */
 void pollards::f(mpz_t x, mpz_t n) {
-    mpz_mul(x, x, x);
+    mpz_mul(x, x, x);       // Mycket snabbare än mpz_pow_ui(x, x, 2)
     mpz_add_ui(x, x, 1);
     mpz_mod(x, x, n);
 }
