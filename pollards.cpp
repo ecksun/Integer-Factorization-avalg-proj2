@@ -39,12 +39,16 @@ bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors, int initValue) 
 
         // The actual pollards algoritm
         while (mpz_cmp_si(factor, 1) == 0) {
-            pollards::f(x, n);
-            pollards::f(y, n);
-            pollards::f(y, n);
-            mpz_sub(tmp, y, x);
-            mpz_abs(tmp, tmp);
-            mpz_gcd(factor, tmp, n);
+            mpz_set_ui(factor, 1);
+            for (int i = 0; i < 15; i++) {
+                pollards::f(x, n);
+                pollards::f(y, n);
+                pollards::f(y, n);
+                mpz_sub(tmp, y, x);
+                mpz_abs(tmp, tmp);
+                mpz_mul(factor, factor, tmp);
+            }
+            mpz_gcd(factor, factor, n);
             // std::cerr << "x:" << x << std::endl;
             // std::cerr << "y:" << y << std::endl;
             // std::cerr << "factor:" << factor << std::endl;
@@ -58,8 +62,8 @@ bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors, int initValue) 
             // in this if statement we dont have the ability to fail.
             // This might cause TLE if we increase the input values
             // It runs OK with < 87 bits.
-            return pollards::factor(n, factors, initValue+1);
-            // return false;
+            // return pollards::factor(n, factors, initValue+1);
+            return false;
         }
         else {
             // We found a factor! lets se if it contains any more factors
