@@ -1,5 +1,7 @@
 FLAGS=-O2 -lgmpxx -lgmp
-all: clean
+all: compile clean
+
+compile:
 	g++ ${FLAGS} main.cpp pollards.h pollards.cpp trial_division.h trial_division.cpp
 
 run: all

@@ -9,26 +9,7 @@ bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors) {
      */
     if (mpz_cmp_si(n, 1) == 0)
         return true;
-    /* 
-     * If we have an even number, we have a special case, pollards
-     * didnt seem to handle the factor 2 verry well
-     */
-    // if (mpz_even_p(n)) {
-        // // Jämnt tal
-        // // std::cerr << "Found even number" << std::endl;
-// 
-        // mpz_class two(2);
-// 
-        // factors.push_back(two);
-// 
-        // mpz_divexact_ui(n, n, 2);
-// 
-        // if (pollards::factor(n, factors))
-            // return true;
-        // else 
-            // return false;
-    // }
-    // Hantera bara 64 bitars tal så faktorerna får plats i en lista med unsigned long ints
+    // Hantera bara "små" tal så faktorerna får plats i en lista med unsigned long ints
     if (mpz_sizeinbase(n, 2) >= 87) {
         return false;
     }

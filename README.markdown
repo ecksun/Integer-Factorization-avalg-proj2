@@ -3,6 +3,7 @@ http://www.interactivecode.com/programming-coding-1/implementing-quadratic-sieve
 http://xvid.se/~xun/001692.html
 http://www.nada.kth.se/~joel/qs_lecture.pdf
 http://www.math.uiuc.edu/~landquis/quadsieve.pdf
+http://www.mersennewiki.org/index.php/P-1_Factorization_Method
 
 
 <h2>Pollard's rho algoritm</h2>

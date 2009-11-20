@@ -15,7 +15,7 @@ int main() {
     while (scanf("%s", &string) != EOF) {
         // Read the next integer
         mpz_set_str(a, string, 10);
-        std::cerr << "working on: " << a << std::endl;
+        // std::cerr << "working on: " << a << std::endl;
         // Try trial division for small numbers here instead of 
         // in pollards
         
