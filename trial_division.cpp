@@ -25,7 +25,7 @@ void trial_division::factor(mpz_t n, std::vector<mpz_class> & factors) {
         factors.push_back(two);
 
         mpz_divexact_ui(n, n, 2);
-
+        this->factor(n, factors); 
     }
     else {
         for (int i = 0; i < divisors; i++) {

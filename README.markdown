@@ -39,7 +39,3 @@ att man måste konvertera den till en mpz_t varje gång, vilket känns otympligt
 För tillfället så använder jag mpz_t överallt förutom när jag stoppar in faktorerna i vektorn för utskrift, då 
 gör jag om dem till mpz_class. Jag tror det fungerar tillräckligt bra, då det som max finns 100 faktorer på ett 100
 bitars tal. Så maximalt kommer vi kasta om mpz_t till mpz_class 50*100=5000 gånger, det känns inte som så mycket overhead
-
-<h1>Tal i kattis testfall</h1>
-Ett tal ligger mellan 84 och 86 bitar
-Två tal mellan 86 och 87 bitar
