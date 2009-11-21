@@ -1,4 +1,4 @@
-FLAGS=-O2 -lgmpxx -lgmp
+FLAGS=-O2 -m64 -lgmpxx -lgmp
 FILES=main.cpp pollards.h pollards.cpp trial_division.h trial_division.cpp fermat_squares.h fermat_squares.cpp
 
 all: compile clean

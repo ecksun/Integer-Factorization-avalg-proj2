@@ -4,7 +4,8 @@
 #include "fermat_squares.h"
 #include <iostream>
 #define prime_test_reps 5
-#define max_iterations 1000
+#define max_bit_size 88
+#define max_iterations 100000
 
 
 /**
@@ -12,6 +13,10 @@
  * get the required odd composite.
  */
 bool fermat_squares::prime_factorize(mpz_t n, std::vector<mpz_class> & factors) {
+
+    if (mpz_sizeinbase(n, 2) >= max_bit_size) {
+        return false;
+    }
 
     while (mpz_even_p(n)) {
         factors.push_back(mpz_class(2));
@@ -29,7 +34,8 @@ bool fermat_squares::prime_factorize(mpz_t n, std::vector<mpz_class> & factors) 
 bool fermat_squares::factorize(mpz_t n, std::vector<mpz_class> & factors) {
 
     if (is_prime(n)) {
-        factors.push_back(mpz_class(n));
+        mpz_class tmp(n);
+        factors.push_back(tmp);
         return true;
     }
 
@@ -43,12 +49,15 @@ bool fermat_squares::factorize(mpz_t n, std::vector<mpz_class> & factors) {
     bool factors_found = false;
     unsigned int iterations = 0;
 
+
     while (!factors_found && iterations++ < max_iterations) {
         q(q_x, x, n);  // Q(x)
 
 //        std::cerr << "x: " << x << ", Q(x): " << q_x << std::endl;
 
         if (mpz_perfect_square_p(q_x)) { // Q(x) is perfect square
+
+//            std::cerr << "Perfect square: " << q_x << std::endl;
 
             mpz_sqrt(q_x_sqrt, q_x); // sqrt(Q(x))
             mpz_class q_x_sqrt_cls(q_x_sqrt); // wrap sqrt(Q(x))
@@ -86,6 +95,9 @@ bool fermat_squares::factorize(mpz_t n, std::vector<mpz_class> & factors) {
         }
     }
 
+    mpz_clear(x);
+    mpz_clear(q_x_sqrt);
+
     return factors_found; 
 }
 
@@ -99,6 +111,8 @@ void fermat_squares::q(mpz_t & q_x, mpz_t x, mpz_t n) {
 
     // Q(x) = x^2 - n
     mpz_sub(q_x, x_sq, n);
+
+    mpz_clear(x_sq);
 }
 
 bool fermat_squares::is_prime(mpz_t number) {

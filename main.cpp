@@ -37,8 +37,9 @@ int main() {
                 std::cout << factors[i] << std::endl;
             }
         }
-        else 
+        else {
             std::cout << "fail" << std::endl;
+        }
 
 
         // Clear the vector to store the next integers factors
@@ -46,5 +47,7 @@ int main() {
 
         std::cout << std::endl;
     }
+
+    mpz_clear(a);
 }
 
