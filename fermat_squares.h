@@ -5,10 +5,10 @@
 
 class fermat_squares {
 
-    static void q(mpz_class & q_x, mpz_class x, mpz_class n);
+    static void q(mpz_t & q_x, mpz_t x, mpz_t n);
 
     public:
-        static bool prime_factorize(mpz_class, std::vector<mpz_class> &);
-        static bool factorize(mpz_class, std::pair<mpz_class,mpz_class> &);
+        static bool prime_factorize(mpz_t, std::vector<mpz_class> &);
+        static bool factorize(mpz_t, std::pair<mpz_class,mpz_class> &);
 
 };
