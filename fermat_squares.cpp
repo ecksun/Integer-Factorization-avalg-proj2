@@ -6,7 +6,7 @@
  * Alternatively, the algorithm decides it is not able to perform the
  * factorization and then returns false instead.
  */
-bool fermat_squares::prime_factorize(mpz_t n, std::vector<mpz_class> & factors) {
+bool fermat_squares::prime_factorize(mpz_class n, std::vector<mpz_class> & factors) {
 
     return false;
 }
@@ -16,18 +16,12 @@ bool fermat_squares::prime_factorize(mpz_t n, std::vector<mpz_class> & factors) 
  * factors, when returning true. If returning false, then the
  * algorithm decided it was not able to perform the factorization.
  */
-bool fermat_squares::factorize(mpz_t n, std::pair<mpz_class,mpz_class> & factors) {
+bool fermat_squares::factorize(mpz_class n, std::pair<mpz_class,mpz_class> & factors) {
 
     bool factors_found = false;
-    mpz_t x, q_x, x_sqr, q_x_sqr;
+    mpz_class x, q_x, x_sqr, q_x_sqr;
 
-    mpz_init(x);
-    mpz_init(q_x); 
-    mpz_init(x_sqr);
-    mpz_init(q_x_sqr);
-
-    mpz_sqrt(x, n); // x <-- int(sqrt(n))
-
+    x = sqrt(n);
 
     return true; // TODO
 }
@@ -36,6 +30,8 @@ bool fermat_squares::factorize(mpz_t n, std::pair<mpz_class,mpz_class> & factors
 /**
  * Calculates the function Q(x) = x^2 - n and sets q_x to this value.
  */
-void fermat_squares::q(mpz_t q_x, mpz_t x_sqr, mpz_t n) {
-
+// TODO: should all these arguments be specified as references?
+void fermat_squares::q(mpz_class & q_x, mpz_class x, mpz_class n) {
+    q_x = sqrt(x) - n;
 }
+
