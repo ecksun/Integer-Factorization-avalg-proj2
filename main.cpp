@@ -31,7 +31,7 @@ int main() {
 //            std::cout << "fail" << std::endl;
 
 
-        fermat_squares::prime_factorize(a, factors);
+        fermat_squares::factorize(a, factors);
 
         for (int i = 0; i < factors.size(); i++) {
             std::cout << factors[i] << std::endl;

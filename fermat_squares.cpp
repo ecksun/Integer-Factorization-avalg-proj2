@@ -7,7 +7,7 @@
  * factors and places in the given std vector, when returning true.
  * Alternatively, the algorithm decides it is not able to perform the
  * factorization and then returns false instead.
- */
+ *
 bool fermat_squares::prime_factorize(mpz_t n, std::vector<mpz_class> & factors) {
 
     std::pair<mpz_class,mpz_class> factors_pair;
@@ -38,13 +38,14 @@ bool fermat_squares::prime_factorize(mpz_t n, std::vector<mpz_class> & factors) 
 
     return true;
 }
+*/
 
 /**
  * Factorizes the specified multiple precision integer into a pair of
- * factors, when returning true. If returning false, then the
- * algorithm decided it was not able to perform the factorization.
+ * factors. Then recurses and adds the prime factors to the given
+ * vector in the end.
  */
-bool fermat_squares::factorize(mpz_t n, std::pair<mpz_class,mpz_class> & factors) {
+bool fermat_squares::factorize(mpz_t n, std::vector<mpz_class> & factors) {
 
     bool factors_found = false;
     mpz_t x;
@@ -69,11 +70,31 @@ bool fermat_squares::factorize(mpz_t n, std::pair<mpz_class,mpz_class> & factors
             // wrap sqrt(Q(x)) in a class
             mpz_class q_x_sqrt_cls(q_x_sqrt);
 
-            // store in factors pair
-            factors.first = mpz_class(x) - q_x_sqrt_cls; // x - sqrt(Q(x))
-            factors.second = mpz_class(x) + q_x_sqrt_cls; // x + sqrt(Q(x))
+            // store in first and second factors
+            mpz_class fst_cls, snd_cls;
+            fst_cls = mpz_class(x) - q_x_sqrt_cls; // x - sqrt(Q(x))
+            snd_cls = mpz_class(x) + q_x_sqrt_cls; // x + sqrt(Q(x))
 
             factors_found = true;
+
+            // BEGIN [STORE AND RECURSE PART]
+             
+            // first factor
+            if (mpz_probab_prime_p(fst_cls.get_mpz_t(), prime_test_reps)) {
+                factors.push_back(fst_cls);
+            } else {
+                factorize(fst_cls.get_mpz_t(), factors);
+            }
+
+            // second factor
+            if (mpz_probab_prime_p(snd_cls.get_mpz_t(), prime_test_reps)) {
+                factors.push_back(snd_cls);
+            } else {
+                factorize(snd_cls.get_mpz_t(), factors);
+            }
+
+            // END [STORE AND RECURSE PART]
+
         } else {
             mpz_add_ui(x, x, 1); // increment x
         }
