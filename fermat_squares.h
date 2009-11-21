@@ -4,6 +4,8 @@
 
 class fermat_squares {
 
+    inline static bool is_prime(mpz_t);
+    inline static bool is_prime(mpz_class);
     static void q(mpz_t & q_x, mpz_t x, mpz_t n);
 
     public:
