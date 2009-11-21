@@ -1,6 +1,6 @@
 #include "trial_division.h"
 #include <iostream>
-
+#define divisors 256
 
 trial_division::trial_division() {
 }
