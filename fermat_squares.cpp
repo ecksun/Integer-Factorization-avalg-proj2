@@ -1,11 +1,8 @@
-#ifndef FERMAT_SQUARES_H
-#define FERMAT_SQUARES_H
-
 #include "fermat_squares.h"
 #include <iostream>
 #define prime_test_reps 5
-#define max_bit_size 88
-#define max_iterations 100000
+#define max_bit_size 60
+#define max_iterations 10000000
 
 
 /**
@@ -34,8 +31,7 @@ bool fermat_squares::prime_factorize(mpz_t n, std::vector<mpz_class> & factors) 
 bool fermat_squares::factorize(mpz_t n, std::vector<mpz_class> & factors) {
 
     if (is_prime(n)) {
-        mpz_class tmp(n);
-        factors.push_back(tmp);
+        factors.push_back(mpz_class(n));
         return true;
     }
 
@@ -49,15 +45,10 @@ bool fermat_squares::factorize(mpz_t n, std::vector<mpz_class> & factors) {
     bool factors_found = false;
     unsigned int iterations = 0;
 
-
     while (!factors_found && iterations++ < max_iterations) {
         q(q_x, x, n);  // Q(x)
 
-//        std::cerr << "x: " << x << ", Q(x): " << q_x << std::endl;
-
         if (mpz_perfect_square_p(q_x)) { // Q(x) is perfect square
-
-//            std::cerr << "Perfect square: " << q_x << std::endl;
 
             mpz_sqrt(q_x_sqrt, q_x); // sqrt(Q(x))
             mpz_class q_x_sqrt_cls(q_x_sqrt); // wrap sqrt(Q(x))
@@ -69,26 +60,7 @@ bool fermat_squares::factorize(mpz_t n, std::vector<mpz_class> & factors) {
 
             factors_found = true;
 
-            // BEGIN [STORE AND RECURSE PART]
-
-            bool first = true, second = true;
-
-            // first factor
-            if (is_prime(fst_cls)) {
-                factors.push_back(fst_cls);
-            } else {
-                first = factorize(fst_cls.get_mpz_t(), factors);
-            }
-
-            // second factor
-            if (is_prime(snd_cls)) {
-                factors.push_back(snd_cls);
-            } else {
-                second = factorize(snd_cls.get_mpz_t(), factors);
-            }
-
-            return first && second;
-            // END [STORE AND RECURSE PART]
+            save_and_recurse(fst_cls, snd_cls, factors);
 
         } else {
             mpz_add_ui(x, x, 1); // increment x
@@ -99,6 +71,30 @@ bool fermat_squares::factorize(mpz_t n, std::vector<mpz_class> & factors) {
     mpz_clear(q_x_sqrt);
 
     return factors_found; 
+}
+
+/**
+ * Saves the two specified mpz's in the factors vector and make 
+ * recursive calls on both of them.
+ */
+bool fermat_squares::save_and_recurse(mpz_class fst_cls, mpz_class snd_cls, std::vector<mpz_class> & factors) {
+    bool first = true, second = true;
+
+    // first factor
+    if (is_prime(fst_cls)) {
+        factors.push_back(fst_cls);
+    } else {
+        first = factorize(fst_cls.get_mpz_t(), factors);
+    }
+
+    // second factor
+    if (is_prime(snd_cls)) {
+        factors.push_back(snd_cls);
+    } else {
+        second = factorize(snd_cls.get_mpz_t(), factors);
+    }
+
+    return first && second;
 }
 
 /**
@@ -122,5 +118,3 @@ bool fermat_squares::is_prime(mpz_t number) {
 bool fermat_squares::is_prime(mpz_class number) {
     return mpz_probab_prime_p(number.get_mpz_t(), prime_test_reps);
 }
-
-#endif /* FERMAT_SQUARES_H */
