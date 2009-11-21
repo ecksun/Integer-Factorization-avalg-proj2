@@ -31,11 +31,15 @@ int main() {
 //            std::cout << "fail" << std::endl;
 
 
-        fermat_squares::factorize(a, factors);
-
-        for (int i = 0; i < factors.size(); i++) {
-            std::cout << factors[i] << std::endl;
+        if (fermat_squares::prime_factorize(a, factors)) {
+            // In case we didnt fail, print the factors
+            for (int i = 0; i < factors.size(); i++) {
+                std::cout << factors[i] << std::endl;
+            }
         }
+        else 
+            std::cout << "fail" << std::endl;
+
 
         // Clear the vector to store the next integers factors
         factors.clear();

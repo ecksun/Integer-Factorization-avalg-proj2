@@ -1,6 +1,25 @@
+#ifndef FERMAT_SQUARES_H
+#define FERMAT_SQUARES_H
+
 #include "fermat_squares.h"
 #include <iostream>
 #define prime_test_reps 5
+#define max_iterations 1000
+
+
+/**
+ * First factorizes all 2's before running the algorithm, in order to
+ * get the required odd composite.
+ */
+bool fermat_squares::prime_factorize(mpz_t n, std::vector<mpz_class> & factors) {
+
+    while (mpz_even_p(n)) {
+        factors.push_back(mpz_class(2));
+        mpz_divexact_ui(n, n, 2); // TODO: optimize by performing a right shift
+    }
+
+    return factorize(n, factors);
+}
 
 /**
  * Factorizes the specified multiple precision integer into a pair of
@@ -8,14 +27,6 @@
  * vector in the end.
  */
 bool fermat_squares::factorize(mpz_t n, std::vector<mpz_class> & factors) {
-
-    // first we factorize all 2's in order to get the required odd composite
-    while (mpz_even_p(n)) {
-        factors.push_back(mpz_class(2));
-        mpz_divexact_ui(n, n, 2); // TODO: optimize by performing a right shift
-    }
-
-    bool factors_found = false;
 
     if (is_prime(n)) {
         factors.push_back(mpz_class(n));
@@ -29,10 +40,13 @@ bool fermat_squares::factorize(mpz_t n, std::vector<mpz_class> & factors) {
     mpz_t q_x; mpz_init(q_x); 
     mpz_t q_x_sqrt; mpz_init(q_x_sqrt); 
 
-    while (!factors_found) {
+    bool factors_found = false;
+    unsigned int iterations = 0;
+
+    while (!factors_found && iterations++ < max_iterations) {
         q(q_x, x, n);  // Q(x)
 
-//        std::cout << "x: " << x << ", Q(x): " << q_x << std::endl;
+//        std::cerr << "x: " << x << ", Q(x): " << q_x << std::endl;
 
         if (mpz_perfect_square_p(q_x)) { // Q(x) is perfect square
 
@@ -47,21 +61,24 @@ bool fermat_squares::factorize(mpz_t n, std::vector<mpz_class> & factors) {
             factors_found = true;
 
             // BEGIN [STORE AND RECURSE PART]
-             
+
+            bool first = true, second = true;
+
             // first factor
             if (is_prime(fst_cls)) {
                 factors.push_back(fst_cls);
             } else {
-                factorize(fst_cls.get_mpz_t(), factors);
+                first = factorize(fst_cls.get_mpz_t(), factors);
             }
 
             // second factor
             if (is_prime(snd_cls)) {
                 factors.push_back(snd_cls);
             } else {
-                factorize(snd_cls.get_mpz_t(), factors);
+                second = factorize(snd_cls.get_mpz_t(), factors);
             }
 
+            return first && second;
             // END [STORE AND RECURSE PART]
 
         } else {
@@ -76,15 +93,12 @@ bool fermat_squares::factorize(mpz_t n, std::vector<mpz_class> & factors) {
  * Calculates the function Q(x) = x^2 - n.
  */
 void fermat_squares::q(mpz_t & q_x, mpz_t x, mpz_t n) {
-    mpz_class x_sq_cls;
-    mpz_mul(x_sq_cls.get_mpz_t(), x, x);
+    // x^2
+    mpz_t x_sq; mpz_init(x_sq);
+    mpz_mul(x_sq, x, x);
 
-    // Q(x)
-    mpz_class q_x_cls; // init
-    q_x_cls = x_sq_cls - mpz_class(n); // calc
-
-    // set for return
-    mpz_set(q_x, q_x_cls.get_mpz_t());
+    // Q(x) = x^2 - n
+    mpz_sub(q_x, x_sq, n);
 }
 
 bool fermat_squares::is_prime(mpz_t number) {
@@ -94,3 +108,5 @@ bool fermat_squares::is_prime(mpz_t number) {
 bool fermat_squares::is_prime(mpz_class number) {
     return mpz_probab_prime_p(number.get_mpz_t(), prime_test_reps);
 }
+
+#endif /* FERMAT_SQUARES_H */
