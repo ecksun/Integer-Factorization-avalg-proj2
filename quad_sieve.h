@@ -7,15 +7,17 @@
 
 class quad_sieve {
 
-    int factor_base_size;
-    int factor_base[];
+    mpz_t * factor_base;
 
-    void q(mpz_t & q_x, mpz_t x, mpz_t n);
-    void setup_factor_base();
+    void q(mpz_t &, mpz_t, mpz_t);
+    void generate_factor_base(mpz_t);
+    void find_b_smooth_numbers(mpz_t, int);
+    void select_b_smooth_numbers(std::vector<int>);
+    void sieve_interval_start(mpz_t, mpz_t);
 
     public:
-    explicit quad_sieve(const int);
-
+    quad_sieve();
+    ~quad_sieve();
     bool prime_factorize(mpz_t, std::vector<mpz_class> &);
 
 };

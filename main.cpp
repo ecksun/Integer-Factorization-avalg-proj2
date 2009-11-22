@@ -19,7 +19,9 @@ int main() {
         mpz_set_str(a, string, 10);
         std::cerr << "working on: " << a << std::endl;
 
-        if (quad_sieve::prime_factorize(a, factors)) {
+        quad_sieve qs;
+
+        if (qs.prime_factorize(a, factors)) {
             // In case we didnt fail, print the factors
             for (int i = 0; i < factors.size(); i++) {
                 std::cout << factors[i] << std::endl;
