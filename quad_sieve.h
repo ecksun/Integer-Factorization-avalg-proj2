@@ -7,10 +7,8 @@
 
 class quad_sieve {
 
-    mpz_t * factor_base;
-
     void q(mpz_t &, mpz_t, mpz_t);
-    void generate_factor_base(mpz_t);
+    void generate_factor_base(std::vector<mpz_class> &, mpz_t);
     void find_b_smooth_numbers(mpz_t, int);
     void select_b_smooth_numbers(std::vector<int>);
     void sieve_interval_start(mpz_t, mpz_t);

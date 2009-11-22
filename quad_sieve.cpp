@@ -10,14 +10,12 @@ const int factor_base_size = 5;
  * Constructs a new Quadratic Siever.
  */
 quad_sieve::quad_sieve() {
-    factor_base = new mpz_t [factor_base_size];
 }
 
 /**
  * Destructs this Quadratic Siever.
  */
 quad_sieve::~quad_sieve() {
-    delete[] factor_base;
 }
 
 /**
@@ -28,11 +26,15 @@ quad_sieve::~quad_sieve() {
  */
 bool quad_sieve::prime_factorize(mpz_t n, std::vector<mpz_class> & factors) {
 
-    generate_factor_base(n);
+    std::vector<mpz_class> factor_base;
+    generate_factor_base(factor_base, n);
 
     mpz_t x;
     mpz_init(x);
     sieve_interval_start(x, n);
+
+
+    return false;
 
     find_b_smooth_numbers(x, factor_base_size+1);
 
@@ -63,11 +65,19 @@ void quad_sieve::q(mpz_t & y, mpz_t x, mpz_t n) {
  *
  * @param n The integer that will be factorized
  */
-void quad_sieve::generate_factor_base(mpz_t n) {
+void quad_sieve::generate_factor_base(std::vector<mpz_class> & B, mpz_t n) {
     mpz_t p;
     mpz_init_set_ui(p, 2);
+    B.push_back(mpz_class(p));
 
-    for (int i = 0; i < factor_base_size; i++) {
+    int i = 1;
+    while (i < factor_base_size) {
+        mpz_nextprime(p, p);
+
+        if (mpz_legendre(n, p) == 1) {
+            B.push_back(mpz_class(p));
+            i++;
+        }
 
     }
 
