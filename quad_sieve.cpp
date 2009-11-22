@@ -26,20 +26,17 @@ quad_sieve::~quad_sieve() {
  */
 bool quad_sieve::prime_factorize(mpz_t n, std::vector<mpz_class> & factors) {
 
-    std::vector<mpz_class> factor_base;
-    generate_factor_base(factor_base, n);
+    std::vector<mpz_class> B;
+    generate_factor_base(B, n);
 
     mpz_t x;
     mpz_init(x);
     sieve_interval_start(x, n, 0);
 
 
-    std::cerr << "find_b_smooth_numbers" << std::endl;
-
-    std::vector<mpz_class> xs, ys;
+    std::vector<mpz_class> xs(B.size()+1), ys(B.size()+1);
     std::vector< std::vector<int> > exps, m2_exps;
-    find_b_smooth_numbers(x, exps, m2_exps, xs, ys, factor_base, n);
-
+    find_b_smooth_numbers(x, exps, m2_exps, xs, ys, B, n);
 
     return false;
 
@@ -108,13 +105,14 @@ void quad_sieve::find_b_smooth_numbers(
     mpz_t y;
     mpz_init(y);
 
-    std::vector<int> exp_vec, m2_exp_vec;
 
     while (found_numbers < B.size()+1) {
-        
+
         q(y, x, n);
 
-        if (b_smooth(exp_vec, m2_exp_vec, y, B)) {
+        std::vector<int> exp_vec(B.size()), m2_exp_vec(B.size());
+
+        if (mpz_sgn(y) == 1 && b_smooth(exp_vec, m2_exp_vec, y, B)) {
 
             xs.push_back(mpz_class(x));
             ys.push_back(mpz_class(y));
@@ -124,12 +122,9 @@ void quad_sieve::find_b_smooth_numbers(
 
             found_numbers++;
 
-            exp_vec.clear();
-            m2_exp_vec.clear();
+            std::cerr << y << std::endl;
 
         }
-
-        std::cerr << "x: " << x << "\ty: " << y << std::endl;
 
         mpz_add_ui(x, x, 1);
         
@@ -145,11 +140,27 @@ void quad_sieve::find_b_smooth_numbers(
  * Otherwise, return false.
  */
 bool quad_sieve::b_smooth(std::vector<int> & expv, std::vector<int> & m2_expv, 
-        mpz_t y, const std::vector<mpz_class> B) {
+        mpz_t y_, const std::vector<mpz_class> B) {
 
+    mpz_t y;
+    mpz_init_set(y, y_);
 
+    for (int i = 0; i < B.size(); i++) {
+        expv[i] = 0;
+        m2_expv[i] = 0;
 
-    return false;
+        mpz_class p = B[i];
+
+        while (mpz_divisible_p(y, p.get_mpz_t())) {
+
+            mpz_divexact(y, y, p.get_mpz_t());
+            expv[i] = expv[i]+1;
+            m2_expv[i] = (m2_expv[i]+1) % 2;
+
+        }
+    }
+
+    return mpz_cmp_ui(y, 1) == 0;  // mpz_cmp_ui(1, 1) == 0
 }
 
 /**
