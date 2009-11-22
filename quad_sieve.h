@@ -9,9 +9,14 @@ class quad_sieve {
 
     void q(mpz_t &, mpz_t, mpz_t);
     void generate_factor_base(std::vector<mpz_class> &, mpz_t);
-    void find_b_smooth_numbers(mpz_t, int);
+    void find_b_smooth_numbers(mpz_t, std::vector< std::vector<int> > &, std::vector< std::vector<int> > &,
+            std::vector<mpz_class> &, std::vector<mpz_class> &, 
+            const std::vector<mpz_class>, mpz_t);
     void select_b_smooth_numbers(std::vector<int>);
-    void sieve_interval_start(mpz_t, mpz_t);
+    void sieve_interval_start(mpz_t, mpz_t, int);
+    bool b_smooth(std::vector<int> &, std::vector<int> &, mpz_t, const std::vector<mpz_class>);
+
+        
 
     public:
     quad_sieve();
