@@ -1,9 +1,10 @@
+#include "pollards.h"
+#include "trial_division.h"
+#include "quad_sieve.h"
 #include <gmp.h>
 #include <gmpxx.h>
 #include <iostream>
-#include "pollards.h"
-#include "trial_division.h"
-#include "fermat_squares.h"
+#include <vector>
 
 int main() {
     mpz_t a;
@@ -17,21 +18,8 @@ int main() {
         // Read the next integer
         mpz_set_str(a, string, 10);
         std::cerr << "working on: " << a << std::endl;
-        // Try trial division for small numbers here instead of 
-        // in pollards
-//        trial_division TD;
-//        TD.factor(a, factors);
-//        if (pollards::factor(a, factors)) {
-//             In case we didnt fail, print the factors
-//            for (int i = 0; i < factors.size(); i++) {
-//                std::cout << factors[i] << std::endl;
-//            }
-//        }
-//        else 
-//            std::cout << "fail" << std::endl;
 
-
-        if (fermat_squares::prime_factorize(a, factors)) {
+        if (quad_sieve::prime_factorize(a, factors)) {
             // In case we didnt fail, print the factors
             for (int i = 0; i < factors.size(); i++) {
                 std::cout << factors[i] << std::endl;

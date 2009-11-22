@@ -1,5 +1,5 @@
 FLAGS=-O2 -m64 -lgmpxx -lgmp
-FILES=main.cpp pollards.h pollards.cpp trial_division.h trial_division.cpp fermat_squares.h fermat_squares.cpp
+FILES=main.cpp pollards.h pollards.cpp trial_division.h trial_division.cpp fermat_squares.h fermat_squares.cpp quad_sieve.h quad_sieve.cpp
 
 all: compile clean
 
