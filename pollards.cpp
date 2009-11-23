@@ -1,6 +1,6 @@
 #include "pollards.h"
 #include <iostream>
-#define max_bit_size 101
+#define max_bit_size 88
 #define iterations_before_gcd 13
 
 bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors) {
