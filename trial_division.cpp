@@ -21,8 +21,7 @@ void trial_division::factor(mpz_t n, std::vector<mpz_class> & factors) {
     if (mpz_cmp_si(n, 1) == 0)
         return;
     /* 
-     * If we have an even number, we have a special case, pollards
-     * didnt seem to handle the factor 2 verry well
+     * If we have an even number, we have a special case
      */
     if (mpz_even_p(n)) {
         mpz_class two(2);
