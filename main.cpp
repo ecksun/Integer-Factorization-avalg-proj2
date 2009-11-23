@@ -33,6 +33,7 @@ int main() {
             std::cout << "fail" << std::endl;
 
         // Clear the vector to store the next integers factors
+        // se om den går att göra snabbare med typ länkad lista
         factors.clear();
 
         std::cout << std::endl;
