@@ -4,7 +4,8 @@
 #include <iostream>
 #include <vector>
 
-const int factor_base_size = 5;
+const int FACTOR_BASE_SIZE = 5;
+const int ADDITIONAL_B_SMOOTH_NUMBERS = 1;
 
 /**
  * Constructs a new Quadratic Siever.
@@ -29,19 +30,29 @@ bool quad_sieve::prime_factorize(mpz_t n, std::vector<mpz_class> & factors) {
     std::vector<mpz_class> B;
     generate_factor_base(B, n);
 
+
     mpz_t x;
     mpz_init(x);
     sieve_interval_start(x, n, 0);
 
 
     std::vector<mpz_class> xs(B.size()+1), ys(B.size()+1);
-    std::vector< std::vector<int> > exps, m2_exps;
+    std::vector< std::vector<int> > exps;
+    std::vector< std::vector<bool> > m2_exps;
     find_b_smooth_numbers(x, exps, m2_exps, xs, ys, B, n);
+
+    for (int i = 0; i < m2_exps.size(); i++) {
+        for (int j = 0; j < m2_exps[i].size(); j++) {
+            std::cerr << m2_exps[i][j] << " ";
+        }
+        std::cerr << std::endl;
+    }
+
 
     return false;
 
-    std::vector<int> selected_indices;
-    select_b_smooth_numbers(selected_indices);
+    std::vector<int> lnr_comb;
+    select_b_smooth_numbers(lnr_comb);
 
 
     // almost done when here ...
@@ -59,6 +70,9 @@ bool quad_sieve::prime_factorize(mpz_t n, std::vector<mpz_class> & factors) {
  * @param n The integral number that are being factorized
  */
 void quad_sieve::q(mpz_t & y, mpz_t x, mpz_t n) {
+
+    // http://en.wikipedia.org/wiki/Quadratic_sieve
+    // ta mod_n istället för sub n?
 
     mpz_t x_sq;
     mpz_init(x_sq);
@@ -78,7 +92,7 @@ void quad_sieve::generate_factor_base(std::vector<mpz_class> & B, mpz_t n) {
     B.push_back(mpz_class(p));
 
     int i = 1;
-    while (i < factor_base_size) {
+    while (i < FACTOR_BASE_SIZE) {
         mpz_nextprime(p, p);
 
         if (mpz_legendre(n, p) == 1) {
@@ -96,7 +110,7 @@ void quad_sieve::generate_factor_base(std::vector<mpz_class> & B, mpz_t n) {
  * that can be fully factorized by the prime factors in B.
  */
 void quad_sieve::find_b_smooth_numbers(
-        mpz_t x, std::vector< std::vector<int> > & exps, std::vector< std::vector<int> > & m2_exps, 
+        mpz_t x, std::vector< std::vector<int> > & exps, std::vector< std::vector<bool> > & m2_exps, 
         std::vector<mpz_class> & xs, std::vector<mpz_class> & ys, 
         const std::vector<mpz_class> B, mpz_t n) {
 
@@ -105,13 +119,14 @@ void quad_sieve::find_b_smooth_numbers(
     mpz_t y;
     mpz_init(y);
 
-
-    while (found_numbers < B.size()+1) {
+    while (found_numbers < B.size()+ADDITIONAL_B_SMOOTH_NUMBERS) {
 
         q(y, x, n);
 
-        std::vector<int> exp_vec(B.size()), m2_exp_vec(B.size());
+        std::vector<int> exp_vec(B.size()+ADDITIONAL_B_SMOOTH_NUMBERS);
+        std::vector<bool> m2_exp_vec(B.size()+ADDITIONAL_B_SMOOTH_NUMBERS);
 
+        // TODO: fix so that negative numbers are allowed
         if (mpz_sgn(y) == 1 && b_smooth(exp_vec, m2_exp_vec, y, B)) {
 
             xs.push_back(mpz_class(x));
@@ -121,8 +136,6 @@ void quad_sieve::find_b_smooth_numbers(
             m2_exps.push_back(m2_exp_vec);
 
             found_numbers++;
-
-            std::cerr << y << std::endl;
 
         }
 
@@ -139,7 +152,7 @@ void quad_sieve::find_b_smooth_numbers(
  * return true and set all corresponding result placeholders.
  * Otherwise, return false.
  */
-bool quad_sieve::b_smooth(std::vector<int> & expv, std::vector<int> & m2_expv, 
+bool quad_sieve::b_smooth(std::vector<int> & expv, std::vector<bool> & m2_expv, 
         mpz_t y_, const std::vector<mpz_class> B) {
 
     mpz_t y;
@@ -154,8 +167,8 @@ bool quad_sieve::b_smooth(std::vector<int> & expv, std::vector<int> & m2_expv,
         while (mpz_divisible_p(y, p.get_mpz_t())) {
 
             mpz_divexact(y, y, p.get_mpz_t());
-            expv[i] = expv[i]+1;
-            m2_expv[i] = (m2_expv[i]+1) % 2;
+            expv[i] = expv[i] + 1;
+            m2_expv[i] = m2_expv[i] ^ 1;
 
         }
     }

@@ -39,3 +39,11 @@ att man måste konvertera den till en mpz_t varje gång, vilket känns otympligt
 För tillfället så använder jag mpz_t överallt förutom när jag stoppar in faktorerna i vektorn för utskrift, då 
 gör jag om dem till mpz_class. Jag tror det fungerar tillräckligt bra, då det som max finns 100 faktorer på ett 100
 bitars tal. Så maximalt kommer vi kasta om mpz_t till mpz_class 50*100=5000 gånger, det känns inte som så mycket overhead
+
+<h1>Quadratic Sieve</h1>
+
+<h2>Liten kom-ihåg-lista.</h2>
+
+<ul>
+<li>Fixa så att basen innehåller -1 och därmed klarar negativa tal.</li>
+</ul>
