@@ -15,7 +15,7 @@ bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors, int initValue) 
      */
     if (mpz_cmp_si(n, 1) == 0)
         return true;
-    // Hantera bara "små" tal så faktorerna får plats i en lista med unsigned long ints
+    // Hantera bara "små" tal 
     if (mpz_sizeinbase(n, 2) >= max_bit_size) {
         return false;
     }
@@ -39,18 +39,39 @@ bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors, int initValue) 
         mpz_init_set_ui(factor, 1);
 
 
+        int power = 1;
+        int lam = 1;
+
         // The actual pollards algoritm
         while (mpz_cmp_si(factor, 1) == 0) {
             mpz_set_ui(factor, 1);
+
             for (int i = 0; i < iterations_before_gcd; i++) {
-                pollards::f(x, n);
+                if (power == lam) {
+                    mpz_set(x, y);
+                    power *= 2;
+                    lam = 0;
+                }
+
                 pollards::f(y, n);
-                pollards::f(y, n);
+                lam++;
+
                 mpz_sub(tmp, y, x);
                 mpz_abs(tmp, tmp);
                 mpz_mul(factor, factor, tmp);
             }
+
             mpz_gcd(factor, factor, n);
+
+            // for (int i = 0; i < iterations_before_gcd; i++) {
+                // pollards::f(x, n);
+                // pollards::f(y, n);
+                // pollards::f(y, n);
+                // mpz_sub(tmp, y, x);
+                // mpz_abs(tmp, tmp);
+                // mpz_mul(factor, factor, tmp);
+            // }
+            // mpz_gcd(factor, factor, n);
             // std::cerr << "x:" << x << std::endl;
             // std::cerr << "y:" << y << std::endl;
             // std::cerr << "factor:" << factor << std::endl;
@@ -64,7 +85,7 @@ bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors, int initValue) 
             // in this if statement we dont have the ability to fail.
             // This might cause TLE if we increase the input values
             // It runs OK with < 88 bits.
-            return pollards::factor(n, factors, initValue-1);
+            return pollards::factor(n, factors, initValue+1);
             // return false;
         }
         else {
