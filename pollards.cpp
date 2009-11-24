@@ -4,7 +4,7 @@
 #define iterations_before_gcd 13
 
 bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors) {
-    pollards::factor(n, factors, 3);
+    pollards::factor(n, factors, 2);
 }
 
 bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors, int initValue) {
