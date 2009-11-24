@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 
-const int FACTOR_BASE_SIZE = 5;
+const int FACTOR_BASE_SIZE = 150;
 const int ADDITIONAL_B_SMOOTH_NUMBERS = 1;
 
 const int MT_ROWS = FACTOR_BASE_SIZE;
@@ -45,27 +45,10 @@ bool quad_sieve::prime_factorize(mpz_t n, std::vector<mpz_class> & factors) {
     find_b_smooth_numbers(x, exps, m2_exps, xs, ys, B, n);
 
 
-    std::vector< std::vector<bool> > & M = m2_exps;
-    for (int row = 0; row < MT_ROWS; row++) {
-        for (int col = 0; col < MT_COLS; col++) {
-            std::cerr << M[col][row] << " ";
-        }
-        std::cerr << std::endl;
-    }
-
-//    for (int col = 0; col < MT_COLS; col++) {
-//        for (int row = 0; row < MT_ROWS; row++) {
-//            std::cerr << M[row][col] << " ";
-//        }
-//        std::cerr << std::endl;
-//    }
+    gauss_eliminate(m2_exps);
 
 
-    std::vector<int> lnr_comb;
-    select_b_smooth_numbers(lnr_comb, m2_exps);
 
-
-    return false;
 
     
     // try the different lnr_comb:s found above
@@ -131,12 +114,12 @@ void quad_sieve::find_b_smooth_numbers(
     mpz_t y;
     mpz_init(y);
 
-    while (found_numbers < B.size()+ADDITIONAL_B_SMOOTH_NUMBERS) {
+    while (found_numbers < MT_COLS) {
 
         q(y, x, n);
 
-        std::vector<int> exp_vec(B.size()+ADDITIONAL_B_SMOOTH_NUMBERS);
-        std::vector<bool> m2_exp_vec(B.size()+ADDITIONAL_B_SMOOTH_NUMBERS);
+        std::vector<int> exp_vec(MT_COLS);
+        std::vector<bool> m2_exp_vec(MT_COLS);
 
         // TODO: fix so that negative numbers are allowed
         if (mpz_sgn(y) == 1 && b_smooth(exp_vec, m2_exp_vec, y, B)) {
@@ -189,10 +172,10 @@ bool quad_sieve::b_smooth(std::vector<int> & expv, std::vector<bool> & m2_expv,
 }
 
 /**
- * Finds a subset of the earlier discovered B-smooth numbers, that
- * will result in a perfect square later on. 
+ * Performs gauss elimination on the transpose of the specified 
+ * matrix.
  */
-void quad_sieve::select_b_smooth_numbers(std::vector<int> & lin_comb, std::vector< std::vector<bool> > & M) {
+void quad_sieve::gauss_eliminate(std::vector< std::vector<bool> > & M) {
 
     // the matrix M is not physically transposed into M^T due to the associated cost
     // therefore it has to be virtually transposed, meaning all accesses are a bit confusing
@@ -200,8 +183,6 @@ void quad_sieve::select_b_smooth_numbers(std::vector<int> & lin_comb, std::vecto
 
     // for each column in M^T
     for (int piv_col = 0; piv_col < MT_COLS; piv_col++) {
-
-        std::cerr << "------------ piv_col: " << piv_col << " --------------" << std::endl;
 
         // find pivot row (and thereby pivot element)
         int piv_row = -1;
@@ -223,7 +204,6 @@ void quad_sieve::select_b_smooth_numbers(std::vector<int> & lin_comb, std::vecto
 
                 if (leading_one) {
                     piv_row = row;
-                    std::cerr << "piv_row: " << piv_row << std::endl;
                     break; // found pivot row
                 }
 
@@ -233,7 +213,6 @@ void quad_sieve::select_b_smooth_numbers(std::vector<int> & lin_comb, std::vecto
 
         // if no pivot row found, continue with next pivot column
         if (piv_row == -1) {
-            std::cerr << "No pivot row found" << std::endl;
             continue;
         }
 
@@ -250,15 +229,6 @@ void quad_sieve::select_b_smooth_numbers(std::vector<int> & lin_comb, std::vecto
             }
 
         }
-
-
-        for (int row = 0; row < MT_ROWS; row++) {
-            for (int col = 0; col < MT_COLS; col++) {
-                std::cerr << M[col][row] << " ";
-            }
-            std::cerr << std::endl;
-        }
-
 
     }
 
