@@ -7,6 +7,9 @@
 const int FACTOR_BASE_SIZE = 5;
 const int ADDITIONAL_B_SMOOTH_NUMBERS = 1;
 
+const int MT_ROWS = FACTOR_BASE_SIZE;
+const int MT_COLS = FACTOR_BASE_SIZE + ADDITIONAL_B_SMOOTH_NUMBERS;
+
 /**
  * Constructs a new Quadratic Siever.
  */
@@ -36,27 +39,36 @@ bool quad_sieve::prime_factorize(mpz_t n, std::vector<mpz_class> & factors) {
     sieve_interval_start(x, n, 0);
 
 
-    std::vector<mpz_class> xs(B.size()+1), ys(B.size()+1);
+    std::vector<mpz_class> xs(MT_COLS), ys(MT_COLS);
     std::vector< std::vector<int> > exps;
     std::vector< std::vector<bool> > m2_exps;
     find_b_smooth_numbers(x, exps, m2_exps, xs, ys, B, n);
 
-    for (int i = 0; i < m2_exps.size(); i++) {
-        for (int j = 0; j < m2_exps[i].size(); j++) {
-            std::cerr << m2_exps[i][j] << " ";
+
+    std::vector< std::vector<bool> > & M = m2_exps;
+    for (int row = 0; row < MT_ROWS; row++) {
+        for (int col = 0; col < MT_COLS; col++) {
+            std::cerr << M[col][row] << " ";
         }
         std::cerr << std::endl;
     }
 
+//    for (int col = 0; col < MT_COLS; col++) {
+//        for (int row = 0; row < MT_ROWS; row++) {
+//            std::cerr << M[row][col] << " ";
+//        }
+//        std::cerr << std::endl;
+//    }
+
+
+    std::vector<int> lnr_comb;
+    select_b_smooth_numbers(lnr_comb, m2_exps);
+
 
     return false;
 
-    std::vector<int> lnr_comb;
-    select_b_smooth_numbers(lnr_comb);
-
-
-    // almost done when here ...
-   
+    
+    // try the different lnr_comb:s found above
     
 
     return true;
@@ -179,10 +191,76 @@ bool quad_sieve::b_smooth(std::vector<int> & expv, std::vector<bool> & m2_expv,
 /**
  * Finds a subset of the earlier discovered B-smooth numbers, that
  * will result in a perfect square later on. 
- *
- * @param subset A placeholder for the indices selected 
  */
-void quad_sieve::select_b_smooth_numbers(std::vector<int> subset) {
+void quad_sieve::select_b_smooth_numbers(std::vector<int> & lin_comb, std::vector< std::vector<bool> > & M) {
+
+    // the matrix M is not physically transposed into M^T due to the associated cost
+    // therefore it has to be virtually transposed, meaning all accesses are a bit confusing
+    // M^T[i][j] == M[j][i]
+
+    // for each column in M^T
+    for (int piv_col = 0; piv_col < MT_COLS; piv_col++) {
+
+        std::cerr << "------------ piv_col: " << piv_col << " --------------" << std::endl;
+
+        // find pivot row (and thereby pivot element)
+        int piv_row = -1;
+
+        for (int row = 0; row < MT_ROWS; row++) {
+
+            // use first row with '1' in pivot column that occurs
+            // AND that has '0' on all positions to the left
+            if (M[piv_col][row]) {
+
+                bool leading_one = true;
+
+                for (int i = 0; i < piv_col; i++) {
+                    if (M[i][row]) {
+                        leading_one = false; 
+                        break; // no need to look for more one's
+                    }
+                }
+
+                if (leading_one) {
+                    piv_row = row;
+                    std::cerr << "piv_row: " << piv_row << std::endl;
+                    break; // found pivot row
+                }
+
+            }
+
+        }
+
+        // if no pivot row found, continue with next pivot column
+        if (piv_row == -1) {
+            std::cerr << "No pivot row found" << std::endl;
+            continue;
+        }
+
+        // make sure all other rows get a '0' in the current pivot column
+        // obviously, all rows before piv_row did already have a '0' in piv_col
+        for (int row = 0; row < MT_ROWS; row++) {
+
+            // needs xor (on whole row)
+            if (M[piv_col][row] && row != piv_row) {
+                // todo: optimize by performing bitwise xor on ints
+                for (int col = 0; col < MT_COLS; col++) {
+                    M[col][row] = M[col][row] ^ M[col][piv_row];
+                }
+            }
+
+        }
+
+
+        for (int row = 0; row < MT_ROWS; row++) {
+            for (int col = 0; col < MT_COLS; col++) {
+                std::cerr << M[col][row] << " ";
+            }
+            std::cerr << std::endl;
+        }
+
+
+    }
 
 }
 
