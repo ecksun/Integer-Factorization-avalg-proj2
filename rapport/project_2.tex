@@ -128,7 +128,6 @@ Ifall $gcd(|a-b|, n) = n$ kan vi istället för att ge upp försöka med ett nyt
         \ENDIF
 \end{algorithmic}
 
-
 \paragraph{Flera gcds samtidigt}
 
 Vi observerar att om den $gcd(x, y) > 1$, så är även $gcd(x\cdot k, b)>1$ för alla heltal $k$. Detta följer naturligt av definitionen på största gemensamma nämnaren.
@@ -271,7 +270,18 @@ och notera att
 
 Antag nu att vi lyckas finna heltal $x_i, i = 1, 2, \dots, k$ så att
 $f(x_1)f(x_2)\cdots f(x_k)$ kan skrivas som en jämn kvadrat $y^2$ för något
-heltal $y$.
+heltal $y$. Låt 
+\begin{align*}
+    x = (x_1 + \lfloor \sqrt{n} \rfloor) (x_2 + \lfloor \sqrt{n} \rfloor)\cdots
+    (x_k + \lfloor \sqrt{n} \rfloor).
+\end{align*}
+Då har vi en lösning till $x^2 \equiv y^2 \imod{n}$.
+
+Om $y$ ska kunna skrivas som en kvadrat vill vi skriva de ingående faktorerna
+$f(x_i)$ som produkter av en gemensam uppsättning primtal, kallad 
+\emph{faktorbasen} för talet $n$. Av den anledningen vill vi inte ha $f(x_i)$
+som delas av stora primtal eftersom det i sådana fall skulle krävas andra
+$f(x_j)$ som delas av samma stora primtal. 
 
 
 
