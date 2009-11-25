@@ -245,7 +245,7 @@ $y_i$ och $y_j$ (utan förlust av generalitet) kan skrivas som en jämn kvadrat 
 och endast om summan av exponenterna för deras respektive primtalsfaktorer är
 jämn.
 
-Då har vi funnit ett talpar $(x, y)$ som vi sökte, vilet genom Euklides algoritm
+Då har vi funnit ett talpar $(x, y)$ som vi sökte, vilket genom Euklides algoritm
 förhoppningsvis ger icke-triviala faktorer.
 
 Denna ansats ökar chanserna att ett sådant talpar ska dyka upp. För att
@@ -315,23 +315,81 @@ beskrivnig av hur själva sållet fungerar ges därför i nästföljande stycke.
 
 \paragraph{Sållet}
 
+Endast ett fåtal tal kommer faktiskt att faktoriseras fullständigt över
+faktorbasen. Vi vill därför kunna sålla bort så många som möjligt med så lite
+ansträngning som möjligt. Detta kan göras utifrån följande observation.
+
+\begin{align*}
+    f(x) &= \tilde{x}^2 - n, \ \tilde{x} = (\lfloor \sqrt{n} \rfloor + x) \\
+    f(x+kp) &= (\tilde{x}+kp)^2-n \\
+    f(x+kp) &= \tilde{x}^2 + 2\tilde{x}kp + (kp)^2 -n \\
+    f(x+kp) &= f(x) + 2\tilde{x}kp + (kp)^2 \equiv f(x) \imod{p}
+\end{align*}
+
+Det vill säga, om man löser $f(x) \equiv 0 \imod{p}$ för $x_i$ får man en lång
+sekvens $f(x_i)$ som är delbara med $p$. På så sätt kan vi snabbt hitta många
+tal som går att faktorisera i den valda faktorbasen.
+
+\paragraph{Gauss-eliminering}
+
+När tillräckligt många användbara $x_i$ och $f(x_i)$ har påträffats återstår det
+bara att pröva olika linjärkombinationer av dessa som ger jämna kvadrater för
+produkten av $f(x_i), i \in [1,k]$. För att vara säkra på att ett linjärt
+beroende existerar behöver vi samla in ett mer $x$ än antalet primtal i
+faktorbasen. 
+
+Att hitta sådana linjärkombinationer kan göras genom att bilda matrisen $A$ med
+radvektorer så som exponenterna för primtalen i faktorbasen för vart och ett av
+de utvalda $x_i$:na, räknat modulo 2. Uppgiften blir sedan att finna nollrummet
+för $A^T$, vilket görs enklast med Gauss-eliminering.
+
+Härifrån återstår endast att pröva de jämn-kvadrat-bildande linjärkombinationer
+av $x_i$ och $y_i$ som nollrummet medger tills en icke-trivial lösning hittas
+med hjälp av \emph{gcd}.
+
+\subsubsection{Implementation}
+
+Det var också så här långt vi hann i implementationen av kvadratiska sållet.
+Dock tog det relativt lång tid att köra programmet så långt, vilket kan ha
+berott på att vi inte hade implementerat någon optimering. En möjlig sådan, bara
+för att nämna någon, hade till exempel kunnat vara att implementera $A$-matrisen
+som rader med bitvektorer istället för vektorer med booleans. Då hade man dels
+sparat en del utrymme, men framför allt hade man kunnat parallellisera
+radoperationerna i Gauss-eliminationen. 
 
 
 
 
 \section{Resultat}
 
-Första versionen av Pollards, ensam, gav oss 28 poäng på kattis. Den enda optimeringen som gjordes var att dividera på 2 om talet var jämnt.
+Första versionen av Pollards, ensam, gav oss 28 poäng på kattis. Den enda
+optimeringen som gjordes var att dividera på 2 om talet var jämnt.
 
-I andra revisionen av Pollards rho ändrade vi startvärdet för de två talen till 3, vilket gav oss en extra poäng samt en hel del extra tid, men tiden över kunde vi angripa större tal. I den här revisionen angrep Pollards rho alla tal mindre än 87 bitar, vilket resulterade i 31 poäng.
+I andra revisionen av Pollards rho ändrade vi startvärdet för de två talen till
+3, vilket gav oss en extra poäng samt en hel del extra tid, men tiden över kunde
+vi angripa större tal. I den här revisionen angrep Pollards rho alla tal mindre
+än 87 bitar, vilket resulterade i 31 poäng.
 
-Genom att implementera trial division på de 256 första primtalen kunde vi ta hem ytterligare poäng, kattis gav oss vid den här tidpunkten 38 poäng.
+Genom att implementera trial division på de 256 första primtalen kunde vi ta hem
+ytterligare poäng, kattis gav oss vid den här tidpunkten 38 poäng.
 
-Nästa steg var att testa med nya startvärden för de två talen i Pollards rho om vi misslyckades att finna en faktor. Detta innebär att vår implementation av Pollards rho lyckas faktorisera alla tal vi får från Kattis som är mindre än 87 bitar.
+Nästa steg var att testa med nya startvärden för de två talen i Pollards rho om
+vi misslyckades att finna en faktor. Detta innebär att vår implementation av
+Pollards rho lyckas faktorisera alla tal vi får från Kattis som är mindre än 87
+bitar.
 
-Genom att beräkna den största gemensamma delaren endast var 13e iteration lyckades vi minska körtiden med mer än 10 sekunder. Detta gav oss möjligheten att testa tal mindre än 88 bitar, vilket resulterade i 39 poäng.
+Genom att beräkna den största gemensamma delaren endast var 13e iteration
+lyckades vi minska körtiden med mer än 10 sekunder. Detta gav oss möjligheten
+att testa tal mindre än 88 bitar, vilket resulterade i 39 poäng.
 
-Den sista optimeringen av Pollards rho vi gjorde var att byta cykel-finnar-algoritmen från Floyds till Brents, det gav ungefär 5 sekunders förbättring och möjligheten att angripa alla tal mindre än 89 bitar. Tråkigt nog gav det inte oss några extra poäng så vi gick tillbaka till 88 bitar igen. Med tiden som blev över gick vi från att testa med de 150 första primtalen till att testa de 10000 första primtalen i trial divison, vilket gav oss den slutgiltiga poängen, 40.
+Den sista optimeringen av Pollards rho vi gjorde var att byta
+cykel-finnar-algoritmen från Floyds till Brents, det gav ungefär 5 sekunders
+förbättring och möjligheten att angripa alla tal mindre än 89 bitar. Tråkigt nog
+gav det inte oss några extra poäng så vi gick tillbaka till 88 bitar igen. Med
+tiden som blev över gick vi från att testa med de 150 första primtalen till att
+testa de 10000 första primtalen i trial divison, vilket gav oss den slutgiltiga
+poängen, 40.
+
 
 
 
