@@ -162,27 +162,35 @@ Genom att utnytja detta fenomen kan vi räkna ut flera $|a-b|$ innan vi beräkna
 Tanken bakom optimeringen som Brent och Pollard kom fram till är att endast göra ett funktionsanrop till $f(x)$ i varje iteration, istället för tre. Detta sker genom att vi använder Brent's metod för att hitta cykler istället för Floyd's. 
 
 Floyd's algoritm för att hitta cykler går ut på att låta talet $b$ röra sig dubbelt så fort som $a$. Brents algoritm söker istället efter den minsta tvåpotens som är större än längden på cykeln.
+\begin{algorithmic}
+    \STATE pollards rho($n$, $X_0$)
+        \STATE $power \gets 1$
+        \STATE $iterations \gets 1$
 
-pollards rho(N, X0)
-    a = b = X0
-    \STATE $power \gets 1$
-    \STATE $iterations \gets 1$
+        \WHILE{$ factor = 1$}
+            \FOR {$i = 0$ to $iterationer per gcd$}
+                \IF {$power = iterations$}
+                    \STATE $a \gets b$
+                    \STATE $power \gets power *2$
+                    \STATE $iterations \gets 0$
+                \ENDIF 
+                \STATE $b \gets f(b)$
 
-    \IF {$power = lam$}
-        \STATE $a \gets b$
-        \STATE $power \gets power *2$
-        \STATE $iterations \gets 0$
-    
-    \STATE $b \gets f(b)$
+                \STATE $iterations = iterations + 1$
+            
+            \ENDFOR
 
-    factor = gcd(|a-b|, N)
-    
-    if (factor == N)
-        pollards rho(N, X0+1)
-    else (factor > 1)
-        return factor
 
-Det är självklart även möjligt att implementera optimeringen med flera GCDs samtidigt med Brents cykelfinnar algoritm.
+            \STATE $factor = gcd(factor, n)$
+        \ENDWHILE
+
+        \IF{$factor = n$}
+            \STATE \COMMENT { // Vi testar ett nytt startvärde }
+            \RETURN pollards rho($n$, $X_0+1$) 
+        \ELSIF{$factor \le 1$}
+            \RETURN $factor$
+        \ENDIF
+\end{algorithmic}
 
 
 \subsection{Kvadratiska sållet}
