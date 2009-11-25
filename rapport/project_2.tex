@@ -108,6 +108,7 @@ För varje itteration beräknar vi också den största gemensamma delaren mellan
 \paragraph{Nya startväden}
 
 Ifall $gcd(|a-b|, n) = n$ kan vi istället för att ge upp försöka med ett nytt startvärde, på det viset kan vi faktorisera mer eller mindre alla tal med hjälp av pollards $\rho$.
+
 \begin{algorithmic}
     \STATE pollards rho($n$, $X_0$)
         \STATE $a \gets X_0 $
@@ -134,21 +135,27 @@ Vi observerar att om den $gcd(x, y) > 1$, så är även $gcd(x\cdot k, b)>1$ fö
 
 Genom att utnytja detta fenomen kan vi räkna ut flera $|a-b|$ innan vi beräknar den största gemensamma nämnaren, vilket är en tidskrävande operation i förhållande till den tid som krävs för att applicera $f(x)$ på $a$ och $b$.
 
-pollards rho(N, X0)
-    a = b = X0
+\begin{algorithmic}
+    \STATE pollards rho($n$, $X_0$)
+        \STATE $a \gets X_0 $
+        \STATE $b \gets X_0 $
 
-    while (factor == 1)
-        \FOR {$i = 0$ to $iterationer per gcd$}
-            \STATE $a \gets f(a)$
-            \STATE $b \gets f(f(b))$
-            \STATE $factor \gets factor * |a-b|$
-        \ENDFOR
-        \STATE $factor = gcd(factor, n)$
-    
-    if (factor == N)
-        pollards rho(N, X0+1)
-    else (factor > 1)
-        return factor
+        \WHILE{$ factor = 1$}
+            \FOR {$i = 0$ to $iterationer per gcd$}
+                \STATE $a \gets f(a)$
+                \STATE $b \gets f(f(b))$
+                \STATE $factor \gets factor * |a-b|$
+            \ENDFOR
+            \STATE $factor = gcd(factor, n)$
+        \ENDWHILE
+
+        \IF{$factor = n$}
+            \STATE \COMMENT { // Vi testar ett nytt startvärde }
+            \RETURN pollards rho($n$, $X_0+1$) 
+        \ELSIF{$factor \le 1$}
+            \RETURN $factor$
+        \ENDIF
+\end{algorithmic}
 
 \paragraph{Brent}
 
