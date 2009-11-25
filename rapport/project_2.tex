@@ -84,7 +84,7 @@ $b$ kommer alltså röra sig dubbelt så fort som $a$, vilket är nödvändigt f
 
 För varje itteration beräknar vi också den största gemensamma delaren mellan $a-b$ och $n$. Om resultatet är $1$ har vi inte hittat någonting och gör ytterligare en itteration. Om resultatet blir $n$ innebär det att $a=b$ vilket betyder att vi inte kunde hitta någon faktor. I annat fall har vi hittat en faktor. Vi kan nu fortsätta genom att applicera pollards på de två faktorerna återstående faktorerna, tills vi finner primtal.
 
-pollards_rho(N, X0)
+pollards rho(N, X0)
     a = b = X0
 
     while (factor == 1)
@@ -103,7 +103,7 @@ pollards_rho(N, X0)
 
 Ifall $gcd(|a-b|, n) = n$ kan vi istället för att ge upp försöka med ett nytt startvärde, på det viset kan vi faktorisera mer eller mindre alla tal med hjälp av pollards $\rho$.
 
-pollards_rho(N, X0)
+pollards rho(N, X0)
     a = b = X0
 
     while (factor == 1)
@@ -112,7 +112,7 @@ pollards_rho(N, X0)
         factor = gcd(|a-b|, N)
     
     if (factor == N)
-        pollards_rho(N, X0+1) // Vi testar ett nytt startvärde
+        pollards rho(N, X0+1) // Vi testar ett nytt startvärde
     else (factor > 1)
         return factor
 
@@ -122,18 +122,18 @@ Vi observerar att om den $gcd(x, y) > 1$, så är även $gcd(x\cdot k, b)>1$ fö
 
 Genom att utnytja detta fenomen kan vi räkna ut flera $|a-b|$ innan vi beräknar den största gemensamma nämnaren, vilket är en tidskrävande operation i förhållande till den tid som krävs för att applicera $f(x)$ på $a$ och $b$.
 
-pollards_rho(N, X0)
+pollards rho(N, X0)
     a = b = X0
 
     while (factor == 1)
-        for (i = 0 to loops_per_gcd)
+        for (i = 0 to iterationer per gcd)
             a = f(a)
             b = f(f(b))
             factor = factor * |a-b|
         factor = gcd(factor, N)
     
     if (factor == N)
-        pollards_rho(N, X0+1)
+        pollards rho(N, X0+1)
     else (factor > 1)
         return factor
 
@@ -143,7 +143,7 @@ Tanken bakom optimeringen som Brent och Pollard kom fram till är att endast gö
 
 Floyd's algoritm för att hitta cykler går ut på att låta talet $b$ röra sig dubbelt så fort som $a$. Brents algoritm söker istället efter den minsta tvåpotens som är större än längden på cykeln.
 
-pollards_rho(N, X0)
+pollards rho(N, X0)
     a = b = X0
     power = iterations = 1
 
@@ -157,7 +157,7 @@ pollards_rho(N, X0)
     factor = gcd(|a-b|, N)
     
     if (factor == N)
-        pollards_rho(N, X0+1)
+        pollards rho(N, X0+1)
     else (factor > 1)
         return factor
 
