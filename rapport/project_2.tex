@@ -108,20 +108,25 @@ För varje itteration beräknar vi också den största gemensamma delaren mellan
 \paragraph{Nya startväden}
 
 Ifall $gcd(|a-b|, n) = n$ kan vi istället för att ge upp försöka med ett nytt startvärde, på det viset kan vi faktorisera mer eller mindre alla tal med hjälp av pollards $\rho$.
+\begin{algorithmic}
+    \STATE pollards rho($n$, $X_0$)
+        \STATE $a \gets X_0 $
+        \STATE $b \gets X_0 $
 
-pollards rho(N, X0)
-    a = b = X0
+        \WHILE{$ factor = 1$}
+            \STATE $a \gets f(a)$
+            \STATE $b \gets f(f(b))$
+            \STATE $factor \gets gcd(|a-b|, n)$
+        \ENDWHILE
 
-    while (factor == 1)
-        a = f(a)
-        b = f(f(b))
-        factor = gcd(|a-b|, N)
-    
-    if (factor == N)
-        \STATE \COMMENT // Vi testar ett nytt startvärde
-        \RETURN pollards rho($n$, $X_0+1$) 
-    else (factor > 1)
-        return factor
+        \IF{$factor = n$}
+            \STATE \COMMENT { // Vi testar ett nytt startvärde }
+            \RETURN pollards rho($n$, $X_0+1$) 
+        \ELSIF{$factor \le 1$}
+            \RETURN $factor$
+        \ENDIF
+\end{algorithmic}
+
 
 \paragraph{Flera gcds samtidigt}
 
