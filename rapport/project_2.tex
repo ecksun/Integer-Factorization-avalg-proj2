@@ -85,21 +85,28 @@ $b$ kommer alltså röra sig dubbelt så fort som $a$, vilket är nödvändigt f
 För varje itteration beräknar vi också den största gemensamma delaren mellan $a-b$ och $n$. Om resultatet är $1$ har vi inte hittat någonting och gör ytterligare en itteration. Om resultatet blir $n$ innebär det att $a=b$ vilket betyder att vi inte kunde hitta någon faktor. I annat fall har vi hittat en faktor. Vi kan nu fortsätta genom att applicera pollards på de två faktorerna återstående faktorerna, tills vi finner primtal.
 
 \begin{algorithmic}
-\STATE pollards rho($n$, $X_0$)
-    \STATE $a \gets X_0 $
-    \STATE $b \gets X_0 $
+    \STATE pollards rho($n$, $X_0$)
+        \STATE $a \gets X_0 $
+        \STATE $b \gets X_0 $
 
-    \WHILE {$ factor = 1 $}
-        \STATE $a \gets f(a)$
-        \STATE $b \gets f(f(b))$
-        \STATE $factor \gets gcd(|a-b|, n)$
-    \ENDWHILE
+        \WHILE{$ factor = 1$}
+            \STATE $a \gets f(a)$
+            \STATE $b \gets f(f(b))$
+            \STATE $factor \gets gcd(|a-b|, n)$
+        \ENDWHILE
 
-    \IF {$factor = n$}
-    \RETURN $-1$ \COMMENT {Vi kunde inte hitta någon faktor}
-    \ELSIF {$factor \le 1$}
-        \RETURN $factor$
-    \ENDIF
+        \IF{$factor = n$}
+            \STATE \COMMENT // Vi kunde inte hitta någon faktor
+            \RETURN $-1$ 
+        \ELSE 
+            \IF {$factor \le 1$}
+                \RETURN $factor$
+            \ENDIF
+        \IF {$factor = n$}
+        \RETURN $-1$ \COMMENT {Vi kunde inte hitta någon faktor}
+        \ELSIF {$factor \le 1$}
+            \RETURN $factor$
+        \ENDIF
 \end{algorithmic}
 
 
@@ -117,7 +124,8 @@ pollards rho(N, X0)
         factor = gcd(|a-b|, N)
     
     if (factor == N)
-        pollards rho(N, X0+1) // Vi testar ett nytt startvärde
+        \STATE \COMMENT // Vi testar ett nytt startvärde
+        \RETURN pollards rho($n$, $X_0+1$) 
     else (factor > 1)
         return factor
 
