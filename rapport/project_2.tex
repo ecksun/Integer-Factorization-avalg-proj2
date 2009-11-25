@@ -97,7 +97,7 @@ För varje itteration beräknar vi också den största gemensamma delaren mellan
 
         \IF{$factor = n$}
             \STATE \COMMENT // Vi kunde inte hitta någon faktor
-            \RETURN $-1$ %
+            \RETURN $-1$ 
         \ELSE 
             \IF {$factor \le 1$}
                 \RETURN $factor$
@@ -124,8 +124,8 @@ pollards rho(N, X0)
         factor = gcd(|a-b|, N)
     
     if (factor == N)
-        \RETURN pollards rho($n$, $X_0+1$) %
-        \rcomment{// Vi testar ett nytt startvärde}
+        \STATE \COMMENT // Vi testar ett nytt startvärde
+        \RETURN pollards rho($n$, $X_0+1$) 
     else (factor > 1)
         return factor
 
