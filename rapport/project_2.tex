@@ -96,15 +96,9 @@ För varje itteration beräknar vi också den största gemensamma delaren mellan
         \ENDWHILE
 
         \IF{$factor = n$}
-            \STATE \COMMENT // Vi kunde inte hitta någon faktor
+            \STATE \COMMENT{// Vi kunde inte hitta någon faktor}
             \RETURN $-1$ 
-        \ELSE 
-            \IF {$factor \le 1$}
-                \RETURN $factor$
-            \ENDIF
-        \IF {$factor = n$}
-        \RETURN $-1$ \COMMENT {Vi kunde inte hitta någon faktor}
-        \ELSIF {$factor \le 1$}
+        \ELSIF{$factor \le 1$}
             \RETURN $factor$
         \ENDIF
 \end{algorithmic}
@@ -139,11 +133,12 @@ pollards rho(N, X0)
     a = b = X0
 
     while (factor == 1)
-        for (i = 0 to iterationer per gcd)
-            a = f(a)
-            b = f(f(b))
-            factor = factor * |a-b|
-        factor = gcd(factor, N)
+        \FOR {$i = 0$ to $iterationer per gcd$}
+            \STATE $a \gets f(a)$
+            \STATE $b \gets f(f(b))$
+            \STATE $factor \gets factor * |a-b|$
+        \ENDFOR
+        \STATE $factor = gcd(factor, n)$
     
     if (factor == N)
         pollards rho(N, X0+1)
@@ -158,14 +153,15 @@ Floyd's algoritm för att hitta cykler går ut på att låta talet $b$ röra sig
 
 pollards rho(N, X0)
     a = b = X0
-    power = iterations = 1
+    \STATE $power \gets 1$
+    \STATE $iterations \gets 1$
 
-    if (power == lam)
-        a = b
-        power = power * 2
-        iterations = 0
+    \IF {$power = lam$}
+        \STATE $a \gets b$
+        \STATE $power \gets power *2$
+        \STATE $iterations \gets 0$
     
-    b = f(b)
+    \STATE $b \gets f(b)$
 
     factor = gcd(|a-b|, N)
     
