@@ -95,13 +95,14 @@ För varje itteration beräknar vi också den största gemensamma delaren mellan
             \STATE $factor \gets gcd(|a-b|, n)$
         \ENDWHILE
 
-        \IF{$factor = n$}
-            \STATE \COMMENT // Vi kunde inte hitta någon faktor
+        \IF {$factor = n$}
+        \STATE \COMMENT {Vi kunde inte hitta någon faktor}
             \RETURN $-1$ 
         \ELSE 
             \IF {$factor \le 1$}
                 \RETURN $factor$
             \ENDIF
+        \ENDIF
         \IF {$factor = n$}
         \RETURN $-1$ \COMMENT {Vi kunde inte hitta någon faktor}
         \ELSIF {$factor \le 1$}
@@ -115,19 +116,21 @@ För varje itteration beräknar vi också den största gemensamma delaren mellan
 
 Ifall $gcd(|a-b|, n) = n$ kan vi istället för att ge upp försöka med ett nytt startvärde, på det viset kan vi faktorisera mer eller mindre alla tal med hjälp av pollards $\rho$.
 
-pollards rho(N, X0)
-    a = b = X0
+%\begin{algorithmic}
+%pollards rho(N, X0)
+%    a = b = X0
 
-    while (factor == 1)
-        a = f(a)
-        b = f(f(b))
-        factor = gcd(|a-b|, N)
-    
-    if (factor == N)
-        \STATE \COMMENT // Vi testar ett nytt startvärde
-        \RETURN pollards rho($n$, $X_0+1$) 
-    else (factor > 1)
-        return factor
+%    while (factor == 1)
+%        a = f(a)
+%        b = f(f(b))
+%        factor = gcd(|a-b|, N)
+%    
+%    if (factor == N)
+%        \STATE \COMMENT // Vi testar ett nytt startvärde
+%        \RETURN pollards rho($n$, $X_0+1$) 
+%    else (factor > 1)
+%        return factor
+%\end{algorithmic}
 
 \paragraph{Flera gcds samtidigt}
 
@@ -255,8 +258,10 @@ Antag nu att vi lyckas finna heltal $x_i, i = 1, 2, \dots, k$ så att
 $f(x_1)f(x_2)\cdots f(x_k)$ kan skrivas som en jämn kvadrat $y^2$ för något
 heltal $y$. Låt 
 \begin{align*}
-    x = (x_1 + \lfloor \sqrt{n} \rfloor) (x_2 + \lfloor \sqrt{n} \rfloor)
+    x = (x_1 + \lfloor \sqrt{n} \rfloor) (x_2 + \lfloor \sqrt{n} \rfloor)\cdots
+    (x_k + \lfloor \sqrt{n} \rfloor).
 \end{align*}
+Då har vi en lösning till $x^2 \equiv y^2 \imod{n}$.
 
 
 
