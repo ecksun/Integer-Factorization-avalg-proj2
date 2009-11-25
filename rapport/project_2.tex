@@ -62,18 +62,27 @@ Då råder enligt konjugatregeln ekvivalensen
     n \mid (x^2 - y^2) \Leftrightarrow n \mid (x+y)(x-y).
 \end{align*}
 
-Vidare gäller det att $n \nmid (x+y)$ och $n \nmid (x-y)$, ty $x \not\equiv \pm y
+Vidare gäller att $n \nmid (x+y)$ och $n \nmid (x-y)$, ty $x \not\equiv \pm y
 \imod{n}$. 
 
-Därmed kommer $d = \text{gcd}\left( n, x \pm y \right)$ att vara
-faktorer -- eventuellt triviala sådana -- i $n$. Sannolikheten att vi får triviala
+Därmed kommer $d = \text{gcd}\left( n, x \pm y \right)$ att vara faktorer  $n$
+-- men dock eventuellt triviala sådana. Sannolikheten att vi får triviala
 lösningar är $50 \%$ om $n$ består av endast två primtal och i annat fall lägre
-chans.
+chans. Således kan vi behöva upprepa algoritmen tills icke-triviala faktorer
+hittas.
 
 Nu återstår bara frågan \emph{hur hittar vi effektivt talen $x$ och $y$}?
 
 
 \subsubsection{Fermats algoritm}
+
+Den naiva ansatsen vore här att låta $x$ vandra från $\sqrt{n}$ och uppåt i
+förhoppning om att finna ett $x$ som uppfyller just $x^2 \equiv y^2 \imod{n}$
+för något $y \in \mathbb{Z}$. Detta påminner väldigt mycket om Fermats
+faktoriseringsalgoritm som letar efter tal som uppfyller liknande villkor.
+
+Problemet är att det i praktiken tar alldeles för lång tid att hitta sådana tal
+på det viset, eftersom de är relativt få.
 
 
 
