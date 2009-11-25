@@ -89,17 +89,18 @@ För varje itteration beräknar vi också den största gemensamma delaren mellan
     \STATE $a \gets X_0 $
     \STATE $b \gets X_0 $
 
-    \WHILE $ factor = 1 $
-        $a \gets f(a)$
-        $b \gets f(f(b))$
-        $factor \gets gcd(|a-b|, n)$
+    \WHILE {$ factor = 1 $}
+        \STATE $a \gets f(a)$
+        \STATE $b \gets f(f(b))$
+        \STATE $factor \gets gcd(|a-b|, n)$
     \ENDWHILE
 
-    \IF $factor = n$
-        return $-1$ // Vi kunde inte hitta någon faktor
-    \ELSE $factor \le 1$
-        return $factor$
+    \IF {$factor = n$}
+    \RETURN $-1$ \COMMENT {Vi kunde inte hitta någon faktor}
+    \ELSIF {$factor \le 1$}
+        \RETURN $factor$
     \ENDIF
+\end{algorithmic}
 
 
 \subsubsection{Optimeringar}
