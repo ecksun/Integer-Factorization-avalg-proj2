@@ -5,6 +5,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{parskip}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{amsfonts}
 \usepackage{algorithmic}
 
@@ -171,17 +172,20 @@ Den grundläggande tanken bakom kvadratiska såll-metoden är relativt enkel. M�
     x^2 \equiv y^2 \imod{n}, \ \text{ men } x \not\equiv \pm y \imod{n}.
 \end{align*}
 
-Då råder enligt konjugatregeln följande ekvivalens
+Då råder enligt konjugatregeln ekvivalensen
 \begin{align*}
     n \mid (x^2 - y^2) \Leftrightarrow n \mid (x+y)(x-y).
 \end{align*}
 
-Vidare gäller det att 
-\begin{align*}
-    n \not\mid (x+y)  \  n \not\mid (x-y), 
-\end{align*}
-ty $x \not\equiv \pm y \imod{n}$.
+Vidare gäller det att $n \nmid (x+y)$ och $n \nmid (x-y)$, ty $x \not\equiv \pm y
+\imod{n}$. 
 
+Därmed kommer $d = \text{gcd}\left( n, x \pm y \right)$ att vara
+faktorer -- eventuellt triviala sådana -- i $n$. Sannolikheten att vi får triviala
+lösningar är $50 \%$ om $n$ består av endast två primtal och i annat fall lägre
+chans.
+
+Nu återstår bara frågan \emph{hur hittar vi effektivt talen $x$ och $y$}?
 
 \section{Resultat}
 
@@ -196,6 +200,8 @@ Nästa steg var att testa med nya startvärden för de två talen i Pollards rho
 Genom att beräkna den största gemensamma delaren endast var 13e iteration lyckades vi minska körtiden med mer än 10 sekunder. Detta gav oss möjligheten att testa tal mindre än 88 bitar, vilket resulterade i 39 poäng.
 
 Den sista optimeringen av Pollards rho vi gjorde var att byta cykel-finnar-algoritmen från Floyds till Brents, det gav ungefär 5 sekunders förbättring och möjligheten att angripa alla tal mindre än 89 bitar. Tråkigt nog gav det inte oss några extra poäng så vi gick tillbaka till 88 bitar igen. Med tiden som blev över gick vi från att testa med de 150 första primtalen till att testa de 10000 första primtalen i trial divison, vilket gav oss den slutgiltiga poängen, 40.
+
+\subsubsection{Fermats algoritm}
 
 
 
