@@ -181,15 +181,58 @@ Då råder enligt konjugatregeln ekvivalensen
     n \mid (x^2 - y^2) \Leftrightarrow n \mid (x+y)(x-y).
 \end{align*}
 
-Vidare gäller det att $n \nmid (x+y)$ och $n \nmid (x-y)$, ty $x \not\equiv \pm y
+Vidare gäller att $n \nmid (x+y)$ och $n \nmid (x-y)$, ty $x \not\equiv \pm y
 \imod{n}$. 
 
-Därmed kommer $d = \text{gcd}\left( n, x \pm y \right)$ att vara
-faktorer -- eventuellt triviala sådana -- i $n$. Sannolikheten att vi får triviala
+Därmed kommer $d = \text{gcd}\left( n, x \pm y \right)$ att vara faktorer  $n$
+-- men dock eventuellt triviala sådana. Sannolikheten att vi får triviala
 lösningar är $50 \%$ om $n$ består av endast två primtal och i annat fall lägre
-chans.
+chans. Således kan vi behöva upprepa algoritmen tills icke-triviala faktorer
+hittas.
 
 Nu återstår bara frågan \emph{hur hittar vi effektivt talen $x$ och $y$}?
+
+\subsubsection{Fermats algoritm}
+
+Den naiva ansatsen vore här att låta $x$ vandra från $\sqrt{n}$ och uppåt i
+förhoppning om att finna ett $x$ som uppfyller just $x^2 \equiv y^2 \imod{n}$
+för något $y \in \mathbb{Z}$. Detta påminner väldigt mycket om Fermats
+faktoriseringsalgoritm som letar efter tal som uppfyller liknande villkor.
+
+Problemet är att det i praktiken tar alldeles för lång tid att hitta sådana tal
+på det viset, eftersom de är relativt få. En förbättrad strategi presenterades
+av Dixon som beskrivs i nästa delsektion.
+
+\subsubsection{Dixons metod}
+
+Dixon valde att släppa på kravet på jämna kvadrater och nöjde sig med att finna
+$x$ och $y$ så som beskrivet ovan fast där $y$ bara behöver kunna faktoriseras
+i små primtal. Det vill säga att $y$ ska kunna skrivas som $y =
+p_1^{a_1}p_2^{a_2} \cdots p_k^{a_k}$ för små primtal $p_i$, $i = 1, 2, \dots k$.
+
+Givet en mängd sådana tal $y$ är det möjligt att genom linjär algebra, speciellt
+genom Gauss-eliminering modulo 2, finna delmängder vars produkter av de ingående
+elementen bildar en jämn kvadrat. Detta tack vare observationen att två tal
+$y_i$ och $y_j$ (utan förlust av generalitet) kan skrivas som en jämn kvadrat om
+och endast om summan av exponenterna för deras respektive primtalsfaktorer är
+jämn.
+
+Då har vi funnit ett talpar $(x, y)$ som vi sökte, vilet genom Euklides algoritm
+förhoppningsvis ger icke-triviala faktorer.
+
+Denna ansats ökar chanserna att ett sådant talpar ska dyka upp. För att
+illustrera detta kan nämnas att antalet jämna kvadrater som är mindre än $84923$
+är 292 stycken, medan det finns 662 stycken tal som låter sig faktoriseras av
+endast 2, 3, 5 och 7 samt 4767 tal vars primtalsfaktorer alla är mindre än 30.
+Ändå tar det orimligt lång tid för stora $n$ att så urskiljningslöst bara pröva
+$x$. Lyckligtvis presenterade Carl Pomerance en effektiv metod för att sålla
+bort ointressanta tal $x$, kallad \emph{Quadratic Sieve} (`kvadratiska sållet').
+
+\subsection{Kvadratiska sållet}
+
+
+
+
 
 \section{Resultat}
 
@@ -205,7 +248,6 @@ Genom att beräkna den största gemensamma delaren endast var 13e iteration lyck
 
 Den sista optimeringen av Pollards rho vi gjorde var att byta cykel-finnar-algoritmen från Floyds till Brents, det gav ungefär 5 sekunders förbättring och möjligheten att angripa alla tal mindre än 89 bitar. Tråkigt nog gav det inte oss några extra poäng så vi gick tillbaka till 88 bitar igen. Med tiden som blev över gick vi från att testa med de 150 första primtalen till att testa de 10000 första primtalen i trial divison, vilket gav oss den slutgiltiga poängen, 40.
 
-\subsubsection{Fermats algoritm}
 
 
 
