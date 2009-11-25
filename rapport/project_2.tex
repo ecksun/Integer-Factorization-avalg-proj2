@@ -1,0 +1,77 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{srcltx}
+\usepackage[english,swedish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{parskip}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{algorithmic}
+
+
+\makeatletter
+\def\imod#1{\allowbreak\mkern10mu({\operator@font mod}\,\,#1)}
+\makeatother
+
+\renewcommand{\O}{\ensuremath{\mathcal{O}}}
+\renewcommand{\*}{\ensuremath{\cdot}}
+
+\begin{document}
+
+\selectlanguage{english}
+\title{DD2440 Advanced Algorithms (fall 2009) \\ Project 2 -- Integer
+factorization}
+\author{Joel Pettersson \\ 880519-0637 \\ joelpet@kth.se \and Linus Wallgren \\
+880213-0099  \\ linuswa@kth.se}
+\date{\today}
+\maketitle
+\thispagestyle{empty}
+\newpage
+\setcounter{page}{1}
+
+\selectlanguage{swedish}
+
+\section{Inledning}
+
+\subsection{Problembeskrivning}
+
+Ett primtal är ett tal som endast är delbart med ett och sig själv. Alla tal som
+inte är primtal går att dela upp i primtalsfaktorer. Det vi söker är varje sådan
+primtalsfaktor till ett visst heltal, hädanefter refererat till som $n$ om inget
+annat anges.
+
+
+
+
+\section{Metod}
+
+
+
+
+\subsection{Kvadratiska sållet}
+
+Den grundläggande tanken bakom kvadratiska såll-metoden är relativt enkel. Målet
+är att finna två tal $x, y \in \mathbb{Z}$ sådana att
+\begin{align*}
+    x^2 \equiv y^2 \imod{n}, \ \text{ men } x \not\equiv \pm y \imod{n}.
+\end{align*}
+
+Då råder enligt konjugatregeln följande ekvivalens
+\begin{align*}
+    n \mid (x^2 - y^2) \Leftrightarrow n \mid (x+y)(x-y).
+\end{align*}
+
+Vidare gäller det att 
+\begin{align*}
+    n \not\mid (x+y)  \  n \not\mid (x-y), 
+\end{align*}
+ty $x \not\equiv \pm y \imod{n}$.
+
+
+
+
+
+
+
+
+\end{document}
