@@ -1,6 +1,6 @@
 #include "trial_division.h"
 #include <iostream>
-#define divisors 150
+#define divisors 10000
 
 trial_division::trial_division() {
 }
