@@ -84,18 +84,22 @@ $b$ kommer alltså röra sig dubbelt så fort som $a$, vilket är nödvändigt f
 
 För varje itteration beräknar vi också den största gemensamma delaren mellan $a-b$ och $n$. Om resultatet är $1$ har vi inte hittat någonting och gör ytterligare en itteration. Om resultatet blir $n$ innebär det att $a=b$ vilket betyder att vi inte kunde hitta någon faktor. I annat fall har vi hittat en faktor. Vi kan nu fortsätta genom att applicera pollards på de två faktorerna återstående faktorerna, tills vi finner primtal.
 
-pollards rho(N, X0)
-    a = b = X0
+\begin{algorithmic}
+\STATE pollards rho($n$, $X_0$)
+    \STATE $a \gets X_0 $
+    \STATE $b \gets X_0 $
 
-    while (factor == 1)
-        a = f(a)
-        b = f(f(b))
-        factor = gcd(|a-b|, N)
+    \WHILE $ factor = 1 $
+        $a \gets f(a)$
+        $b \gets f(f(b))$
+        $factor \gets gcd(|a-b|, n)$
+    \ENDWHILE
 
-    if (factor == N)
-        return -1 // Vi kunde inte hitta någon faktor
-    else (factor > 1)
-        return factor
+    \IF $factor = n$
+        return $-1$ // Vi kunde inte hitta någon faktor
+    \ELSE $factor \le 1$
+        return $factor$
+    \ENDIF
 
 
 \subsubsection{Optimeringar}
