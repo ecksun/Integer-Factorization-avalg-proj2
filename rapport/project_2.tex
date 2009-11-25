@@ -89,17 +89,21 @@ För varje itteration beräknar vi också den största gemensamma delaren mellan
     \STATE $a \gets X_0 $
     \STATE $b \gets X_0 $
 
-    \WHILE $ factor = 1 $
-        $a \gets f(a)$
-        $b \gets f(f(b))$
-        $factor \gets gcd(|a-b|, n)$
+    \WHILE{$ factor = 1$}
+        \STATE $a \gets f(a)$
+        \STATE $b \gets f(f(b))$
+        \STATE $factor \gets gcd(|a-b|, n)$
     \ENDWHILE
 
-    \IF $factor = n$
-        return $-1$ // Vi kunde inte hitta någon faktor
-    \ELSE $factor \le 1$
-        return $factor$
+    \IF{$factor = n$}
+        \STATE \COMMENT // Vi kunde inte hitta någon faktor
+        \RETURN $-1$ %
+    \ELSE 
+        \IF {$factor \le 1$}
+            \RETURN $factor$
+        \ENDIF
     \ENDIF
+\end{algorithmic}
 
 
 \subsubsection{Optimeringar}
@@ -116,7 +120,8 @@ pollards rho(N, X0)
         factor = gcd(|a-b|, N)
     
     if (factor == N)
-        pollards rho(N, X0+1) // Vi testar ett nytt startvärde
+        \RETURN pollards rho($n$, $X_0+1$) %
+        \rcomment{// Vi testar ett nytt startvärde}
     else (factor > 1)
         return factor
 
