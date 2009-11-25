@@ -46,7 +46,122 @@ annat anges.
 
 \section{Metod}
 
+\subsection{Trial division}
 
+Det mest triviala sättet att angripa problemet på är att bara testa om talet $n$ är delbart med en primtalsfaktor. Det är ett effektivt sätt att få bort små faktorer men det skalar inte speciellt bra då primtalsfaktorerna blir mer och mer sällsynta ju större faktorer vi söker.
+
+I och med att algoritmen är såpass simpel finns det inte jättemycket att optimera. Det enda man kan hålla koll på är så man inte tittar på eventuella primtalsfaktorer större $\sqrt{n}$. Om vi låter talet $n$ beskrivas av två faktorer, $p$ och $q$, får vi $n = pq$. Ju större q är, desto mindre blir p och vice versa. Om fallet är att p är större än $\sqrt{n}$, kommer p vara mindre än $\sqrt{n}$, den största faktorn vi kan få blir således $\sqrt{n}$. 
+
+\subsection{Pollards rho}
+
+Vi betecknar den största gemensamma nämnaren med funktionen $gcd(x,y)$
+\subsubsection{Grundläggande teori}
+
+Låt $n = pq$, där $p$ och $q$ är okända faktorer till $n$. 
+Vi söker då två tal, $a$ och $b$, sådana att $a = b (mod p)$.
+
+$a=b(mod p)$
+$a-b = 0 mod p$
+$a - b = k*p$
+
+Vi ser att $a-b$ är en multipel av $p$, även $n$ är en multipel av $p$ eftersom $p$ är en faktor till $n$. Den största gemensamma nämnaren mellan $a-b$ och $n$ är således en faktor till $n$, nämligen $p$. 
+
+I dess grundläggande form utnytjar Pollards rho vettigt att skriva såhär? :) -Linus Wallgren 2009-11-25 02.25  Floyds cykel-finnar-algoritm. Den går ut på att hålla koll på två tal som rör sig i olika hastighet i en cykel. När talen är lika har vi gått ett varv i cykeln.
+
+Vi kommer leta därför att efter tal $a$ och $b$ sådana att $gcd(|a-b|, n) \notin {1, n}$. Om $gcd(|a-b|, n)$ visar sig vara 1 fortsätter vi leta med nya $a$ och $b$, ifall $gcd(|a-b|, n) = n$ innebär det att $a=b$ vilket, enligt Floyds cykel-finnar-algoritm, betyder att vi har fullföljt vår cykel och inte kommer hitta någon faktor.
+
+Vi genererar de båda talen $a$ och $b$ med hjälp av en pseudo-slumpmässig funktion modulu $n$. Vi kallar denna funktion $f(x)$.
+
+Anledningen till att vi kan applicera en Cykel-finnar algoritm är att vår pseudo-slumpmässiga funktion ger oss ett tal modulu N vilket innebär att vi endast kan få ett ändligt antal värden. Vi $a=f(a)$ och $b=f(f(b))$ i varje ny iteration av algoritmen. Vi gör detta för att hålla koll så att vi inte beräknar samma tal flera gånger, för när $a=b$ innebär det att vi gått ett varv i vår cykel och kommer således att börja om om vi skulle valt att fortsätta.
+
+\subsubsection{Algoritmen}
+Vi väljer funktionen $f(x) = x^2 + d (mod n)$ för att den visat sig vara effektiv vid experiment, mer specifikt är $d=1$ mycket effektiv. Det är viktigt att $d \notin {0, -2}$ då det innebär att vi  fastnar i en loop som aldrig kommer ge oss någon nyttig information. Vi börjar med ett slumpmässigt startvärde $X_0$ och sätter $a=b=X_0$. För varje iteration av algoritmen gör vi följande:
+
+$a = f(a)$
+$b = f(f(b))$
+
+$b$ kommer alltså röra sig dubbelt så fort som $a$, vilket är nödvändigt för Floyds cykel-finnar algoritm.
+
+För varje itteration beräknar vi också den största gemensamma delaren mellan $a-b$ och $n$. Om resultatet är $1$ har vi inte hittat någonting och gör ytterligare en itteration. Om resultatet blir $n$ innebär det att $a=b$ vilket betyder att vi inte kunde hitta någon faktor. I annat fall har vi hittat en faktor. Vi kan nu fortsätta genom att applicera pollards på de två faktorerna återstående faktorerna, tills vi finner primtal.
+
+pollards_rho(N, X0)
+    a = b = X0
+
+    while (factor == 1)
+        a = f(a)
+        b = f(f(b))
+        factor = gcd(|a-b|, N)
+
+    if (factor == N)
+        return -1 // Vi kunde inte hitta någon faktor
+    else (factor > 1)
+        return factor
+
+
+\subsubsection{Optimeringar}
+\paragraph{Nya startväden}
+
+Ifall $gcd(|a-b|, n) = n$ kan vi istället för att ge upp försöka med ett nytt startvärde, på det viset kan vi faktorisera mer eller mindre alla tal med hjälp av pollards $\rho$.
+
+pollards_rho(N, X0)
+    a = b = X0
+
+    while (factor == 1)
+        a = f(a)
+        b = f(f(b))
+        factor = gcd(|a-b|, N)
+    
+    if (factor == N)
+        pollards_rho(N, X0+1) // Vi testar ett nytt startvärde
+    else (factor > 1)
+        return factor
+
+\paragraph{Flera gcds samtidigt}
+
+Vi observerar att om den $gcd(x, y) > 1$, så är även $gcd(x\cdot k, b)>1$ för alla heltal $k$. Detta följer naturligt av definitionen på största gemensamma nämnaren.
+
+Genom att utnytja detta fenomen kan vi räkna ut flera $|a-b|$ innan vi beräknar den största gemensamma nämnaren, vilket är en tidskrävande operation i förhållande till den tid som krävs för att applicera $f(x)$ på $a$ och $b$.
+
+pollards_rho(N, X0)
+    a = b = X0
+
+    while (factor == 1)
+        for (i = 0 to loops_per_gcd)
+            a = f(a)
+            b = f(f(b))
+            factor = factor * |a-b|
+        factor = gcd(factor, N)
+    
+    if (factor == N)
+        pollards_rho(N, X0+1)
+    else (factor > 1)
+        return factor
+
+\paragraph{Brent}
+
+Tanken bakom optimeringen som Brent och Pollard kom fram till är att endast göra ett funktionsanrop till $f(x)$ i varje iteration, istället för tre. Detta sker genom att vi använder Brent's metod för att hitta cykler istället för Floyd's. 
+
+Floyd's algoritm för att hitta cykler går ut på att låta talet $b$ röra sig dubbelt så fort som $a$. Brents algoritm söker istället efter den minsta tvåpotens som är större än längden på cykeln.
+
+pollards_rho(N, X0)
+    a = b = X0
+    power = iterations = 1
+
+    if (power == lam)
+        a = b
+        power = power * 2
+        iterations = 0
+    
+    b = f(b)
+
+    factor = gcd(|a-b|, N)
+    
+    if (factor == N)
+        pollards_rho(N, X0+1)
+    else (factor > 1)
+        return factor
+
+Det är självklart även möjligt att implementera optimeringen med flera GCDs samtidigt med Brents cykelfinnar algoritm.
 
 
 \subsection{Kvadratiska sållet}
@@ -73,6 +188,19 @@ hittas.
 
 Nu återstår bara frågan \emph{hur hittar vi effektivt talen $x$ och $y$}?
 
+\section{Resultat}
+
+Första versionen av Pollards, ensam, gav oss 28 poäng på kattis. Den enda optimeringen som gjordes var att dividera på 2 om talet var jämnt.
+
+I andra revisionen av Pollards rho ändrade vi startvärdet för de två talen till 3, vilket gav oss en extra poäng samt en hel del extra tid, men tiden över kunde vi angripa större tal. I den här revisionen angrep Pollards rho alla tal mindre än 87 bitar, vilket resulterade i 31 poäng.
+
+Genom att implementera trial division på de 256 första primtalen kunde vi ta hem ytterligare poäng, kattis gav oss vid den här tidpunkten 38 poäng.
+
+Nästa steg var att testa med nya startvärden för de två talen i Pollards rho om vi misslyckades att finna en faktor. Detta innebär att vår implementation av Pollards rho lyckas faktorisera alla tal vi får från Kattis som är mindre än 87 bitar.
+
+Genom att beräkna den största gemensamma delaren endast var 13e iteration lyckades vi minska körtiden med mer än 10 sekunder. Detta gav oss möjligheten att testa tal mindre än 88 bitar, vilket resulterade i 39 poäng.
+
+Den sista optimeringen av Pollards rho vi gjorde var att byta cykel-finnar-algoritmen från Floyds till Brents, det gav ungefär 5 sekunders förbättring och möjligheten att angripa alla tal mindre än 89 bitar. Tråkigt nog gav det inte oss några extra poäng så vi gick tillbaka till 88 bitar igen. Med tiden som blev över gick vi från att testa med de 150 första primtalen till att testa de 10000 första primtalen i trial divison, vilket gav oss den slutgiltiga poängen, 40.
 
 \subsubsection{Fermats algoritm}
 

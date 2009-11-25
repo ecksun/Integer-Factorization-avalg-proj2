@@ -44,7 +44,6 @@ bool pollards::factor(mpz_t n, std::vector<mpz_class> & factors, int initValue) 
 
         // The actual pollards algoritm
         while (mpz_cmp_si(factor, 1) == 0) {
-            mpz_set_ui(factor, 1);
 
             for (int i = 0; i < iterations_before_gcd; i++) {
                 if (power == lam) {
