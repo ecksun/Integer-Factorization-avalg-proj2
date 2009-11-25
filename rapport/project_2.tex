@@ -277,12 +277,43 @@ heltal $y$. Låt
 \end{align*}
 Då har vi en lösning till $x^2 \equiv y^2 \imod{n}$.
 
-Om $y$ ska kunna skrivas som en kvadrat vill vi skriva de ingående faktorerna
-$f(x_i)$ som produkter av en gemensam uppsättning primtal, kallad 
+Om $y$ ska kunna skrivas som en kvadrat vill vi ha de ingående faktorerna
+$f(x_i)$ som produkter av en gemensam uppsättning primtal, kallad
 \emph{faktorbasen} för talet $n$. Av den anledningen vill vi inte ha $f(x_i)$
 som delas av stora primtal eftersom det i sådana fall skulle krävas andra
 $f(x_j)$ som delas av samma stora primtal. 
 
+Så, hur ska vi bära oss åt för att välja en lämplig faktorbas?
+
+\paragraph{Val av faktorbas}
+
+Vi vill ha
+\begin{align*}
+    p_i \mid f(x)
+\end{align*}
+och vet att 
+\begin{align*}
+    &p_i \nmid n \text{ (kräver trial division med alla tal i faktorbasen före
+    start) } \\
+    &f(x) = (\lfloor \sqrt{n} \rfloor + x)^2 - n.
+\end{align*}
+
+Det betyder alltså att vi söker primtal $p_i$ till vår faktorbas sådana att
+\begin{align*}
+    (\lfloor \sqrt{n} \rfloor + x)^2 \equiv n \imod{p}.
+\end{align*}
+Jämför detta med definitionen för kvadratisk rest och inse att $n$ då måste vara
+en kvadratisk rest modulo $p$, vilket är ekvivalent med att Legendresymbolen
+\begin{align*}
+    \left(\frac{n}{p}\right) = 1.
+\end{align*}
+Denna kan relativt enkelt beräknas, vilket öppnar för en effektiv beräkning av
+faktorbasen.
+
+Då är det äntligen dags att börja samla ihop våra $x_i$. En översiktlig
+beskrivnig av hur själva sållet fungerar ges därför i nästföljande stycke.
+
+\paragraph{Sållet}
 
 
 
