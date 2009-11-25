@@ -188,20 +188,6 @@ hittas.
 
 Nu återstår bara frågan \emph{hur hittar vi effektivt talen $x$ och $y$}?
 
-\section{Resultat}
-
-Första versionen av Pollards, ensam, gav oss 28 poäng på kattis. Den enda optimeringen som gjordes var att dividera på 2 om talet var jämnt.
-
-I andra revisionen av Pollards rho ändrade vi startvärdet för de två talen till 3, vilket gav oss en extra poäng samt en hel del extra tid, men tiden över kunde vi angripa större tal. I den här revisionen angrep Pollards rho alla tal mindre än 87 bitar, vilket resulterade i 31 poäng.
-
-Genom att implementera trial division på de 256 första primtalen kunde vi ta hem ytterligare poäng, kattis gav oss vid den här tidpunkten 38 poäng.
-
-Nästa steg var att testa med nya startvärden för de två talen i Pollards rho om vi misslyckades att finna en faktor. Detta innebär att vår implementation av Pollards rho lyckas faktorisera alla tal vi får från Kattis som är mindre än 87 bitar.
-
-Genom att beräkna den största gemensamma delaren endast var 13e iteration lyckades vi minska körtiden med mer än 10 sekunder. Detta gav oss möjligheten att testa tal mindre än 88 bitar, vilket resulterade i 39 poäng.
-
-Den sista optimeringen av Pollards rho vi gjorde var att byta cykel-finnar-algoritmen från Floyds till Brents, det gav ungefär 5 sekunders förbättring och möjligheten att angripa alla tal mindre än 89 bitar. Tråkigt nog gav det inte oss några extra poäng så vi gick tillbaka till 88 bitar igen. Med tiden som blev över gick vi från att testa med de 150 första primtalen till att testa de 10000 första primtalen i trial divison, vilket gav oss den slutgiltiga poängen, 40.
-
 \subsubsection{Fermats algoritm}
 
 Den naiva ansatsen vore här att låta $x$ vandra från $\sqrt{n}$ och uppåt i
@@ -215,6 +201,48 @@ av Dixon som beskrivs i nästa delsektion.
 
 \subsubsection{Dixons metod}
 
+Dixon valde att släppa på kravet på jämna kvadrater och nöjde sig med att finna
+$x$ och $y$ så som beskrivet ovan fast där $y$ bara behöver kunna faktoriseras
+i små primtal. Det vill säga att $y$ ska kunna skrivas som $y =
+p_1^{a_1}p_2^{a_2} \cdots p_k^{a_k}$ för små primtal $p_i$, $i = 1, 2, \dots k$.
+
+Givet en mängd sådana tal $y$ är det möjligt att genom linjär algebra, speciellt
+genom Gauss-eliminering modulo 2, finna delmängder vars produkter av de ingående
+elementen bildar en jämn kvadrat. Detta tack vare observationen att två tal
+$y_i$ och $y_j$ (utan förlust av generalitet) kan skrivas som en jämn kvadrat om
+och endast om summan av exponenterna för deras respektive primtalsfaktorer är
+jämn.
+
+Då har vi funnit ett talpar $(x, y)$ som vi sökte, vilet genom Euklides algoritm
+förhoppningsvis ger icke-triviala faktorer.
+
+Denna ansats ökar chanserna att ett sådant talpar ska dyka upp. För att
+illustrera detta kan nämnas att antalet jämna kvadrater som är mindre än $84923$
+är 292 stycken, medan det finns 662 stycken tal som låter sig faktoriseras av
+endast 2, 3, 5 och 7 samt 4767 tal vars primtalsfaktorer alla är mindre än 30.
+Ändå tar det orimligt lång tid för stora $n$ att så urskiljningslöst bara pröva
+$x$. Lyckligtvis presenterade Carl Pomerance en effektiv metod för att sålla
+bort ointressanta tal $x$, kallad \emph{Quadratic Sieve} (`kvadratiska sållet').
+
+\subsection{Kvadratiska sållet}
+
+
+
+
+
+\section{Resultat}
+
+Första versionen av Pollards, ensam, gav oss 28 poäng på kattis. Den enda optimeringen som gjordes var att dividera på 2 om talet var jämnt.
+
+I andra revisionen av Pollards rho ändrade vi startvärdet för de två talen till 3, vilket gav oss en extra poäng samt en hel del extra tid, men tiden över kunde vi angripa större tal. I den här revisionen angrep Pollards rho alla tal mindre än 87 bitar, vilket resulterade i 31 poäng.
+
+Genom att implementera trial division på de 256 första primtalen kunde vi ta hem ytterligare poäng, kattis gav oss vid den här tidpunkten 38 poäng.
+
+Nästa steg var att testa med nya startvärden för de två talen i Pollards rho om vi misslyckades att finna en faktor. Detta innebär att vår implementation av Pollards rho lyckas faktorisera alla tal vi får från Kattis som är mindre än 87 bitar.
+
+Genom att beräkna den största gemensamma delaren endast var 13e iteration lyckades vi minska körtiden med mer än 10 sekunder. Detta gav oss möjligheten att testa tal mindre än 88 bitar, vilket resulterade i 39 poäng.
+
+Den sista optimeringen av Pollards rho vi gjorde var att byta cykel-finnar-algoritmen från Floyds till Brents, det gav ungefär 5 sekunders förbättring och möjligheten att angripa alla tal mindre än 89 bitar. Tråkigt nog gav det inte oss några extra poäng så vi gick tillbaka till 88 bitar igen. Med tiden som blev över gick vi från att testa med de 150 första primtalen till att testa de 10000 första primtalen i trial divison, vilket gav oss den slutgiltiga poängen, 40.
 
 
 
