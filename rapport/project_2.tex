@@ -96,9 +96,9 @@ För varje itteration beräknar vi också den största gemensamma delaren mellan
         \ENDWHILE
 
         \IF{$factor = n$}
-            \STATE \COMMENT{// Vi kunde inte hitta någon faktor}
+            \STATE \COMMENT{Vi kunde inte hitta någon faktor}
             \RETURN $-1$ 
-        \ELSIF{$factor \le 1$}
+        \ELSIF{$factor > 1$}
             \RETURN $factor$
         \ENDIF
 \end{algorithmic}
@@ -121,9 +121,9 @@ Ifall $gcd(|a-b|, n) = n$ kan vi istället för att ge upp försöka med ett nyt
         \ENDWHILE
 
         \IF{$factor = n$}
-            \STATE \COMMENT { // Vi testar ett nytt startvärde }
+            \STATE \COMMENT {Vi testar ett nytt startvärde}
             \RETURN pollards rho($n$, $X_0+1$) 
-        \ELSIF{$factor \le 1$}
+        \ELSIF{$factor > 1$}
             \RETURN $factor$
         \ENDIF
 \end{algorithmic}
@@ -146,13 +146,13 @@ Genom att utnytja detta fenomen kan vi räkna ut flera $|a-b|$ innan vi beräkna
                 \STATE $b \gets f(f(b))$
                 \STATE $factor \gets factor * |a-b|$
             \ENDFOR
-            \STATE $factor = gcd(factor, n)$
+            \STATE $factor \gets gcd(factor, n)$
         \ENDWHILE
 
         \IF{$factor = n$}
-            \STATE \COMMENT { // Vi testar ett nytt startvärde }
+            \STATE \COMMENT {Vi testar ett nytt startvärde}
             \RETURN pollards rho($n$, $X_0+1$) 
-        \ELSIF{$factor \le 1$}
+        \ELSIF{$factor > 1$}
             \RETURN $factor$
         \ENDIF
 \end{algorithmic}
@@ -176,7 +176,9 @@ Floyd's algoritm för att hitta cykler går ut på att låta talet $b$ röra sig
                 \ENDIF 
                 \STATE $b \gets f(b)$
 
-                \STATE $iterations = iterations + 1$
+                \STATE $iterations \gets iterations + 1$
+
+                \STATE $factor \gets factor * |a-b|$
             
             \ENDFOR
 
@@ -185,9 +187,9 @@ Floyd's algoritm för att hitta cykler går ut på att låta talet $b$ röra sig
         \ENDWHILE
 
         \IF{$factor = n$}
-            \STATE \COMMENT { // Vi testar ett nytt startvärde }
+            \STATE \COMMENT {Vi testar ett nytt startvärde}
             \RETURN pollards rho($n$, $X_0+1$) 
-        \ELSIF{$factor \le 1$}
+        \ELSIF{$factor > 1$}
             \RETURN $factor$
         \ENDIF
 \end{algorithmic}
