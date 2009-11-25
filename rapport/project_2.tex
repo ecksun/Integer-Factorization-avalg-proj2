@@ -280,13 +280,13 @@ heltal $y$.
 
 \section{Resultat}
 
-Första versionen av Pollards, ensam, gav oss 28 poäng på kattis. Den enda optimeringen som gjordes var att dividera på 2 om talet var jämnt.
+Första versionen av Pollards, ensam, gav oss 28 poäng på KATTIS. Den enda optimeringen som gjordes var att dividera på 2 om talet var jämnt.
 
 I andra revisionen av Pollards rho ändrade vi startvärdet för de två talen till 3, vilket gav oss en extra poäng samt en hel del extra tid, men tiden över kunde vi angripa större tal. I den här revisionen angrep Pollards rho alla tal mindre än 87 bitar, vilket resulterade i 31 poäng.
 
-Genom att implementera trial division på de 256 första primtalen kunde vi ta hem ytterligare poäng, kattis gav oss vid den här tidpunkten 38 poäng.
+Genom att implementera trial division på de 256 första primtalen kunde vi ta hem ytterligare poäng, KATTIS gav oss vid den här tidpunkten 38 poäng.
 
-Nästa steg var att testa med nya startvärden för de två talen i Pollards rho om vi misslyckades att finna en faktor. Detta innebär att vår implementation av Pollards rho lyckas faktorisera alla tal vi får från Kattis som är mindre än 87 bitar.
+Nästa steg var att testa med nya startvärden för de två talen i Pollards rho om vi misslyckades att finna en faktor. Detta innebär att vår implementation av Pollards rho lyckas faktorisera alla tal vi får från KATTIS som är mindre än 87 bitar.
 
 Genom att beräkna den största gemensamma delaren endast var 13e iteration lyckades vi minska körtiden med mer än 10 sekunder. Detta gav oss möjligheten att testa tal mindre än 88 bitar, vilket resulterade i 39 poäng.
 
